@@ -325,7 +325,11 @@ class FARTrackSparse(BaseTracker):
 
 
 
-        x_patch_arr, resize_factor, x_amask_arr = sample_target(image, self.state, self.params.search_factor,
+        search_factor_for_frame = self.params.search_factor
+        select_search_factor = getattr(self, "_select_search_factor", None)
+        if select_search_factor is not None:
+            search_factor_for_frame = select_search_factor()
+        x_patch_arr, resize_factor, x_amask_arr = sample_target(image, self.state, search_factor_for_frame,
                                                                 output_sz=self.params.search_size)  # (x1, y1, w, h)
 
         for i in range(len(self.store_result)):
@@ -360,6 +364,13 @@ class FARTrackSparse(BaseTracker):
         record_reliability = getattr(self, "_record_reliability", None)
         if record_reliability is not None:
             record_reliability(out_dict)
+
+        # Research control hooks may observe this completed forward pass to
+        # select a sensing action for a *future* frame.  The current crop,
+        # localization, state, and template path below remain unchanged.
+        after_forward = getattr(self, "_after_tracking_forward", None)
+        if after_forward is not None:
+            after_forward(out_dict)
 
 
         mask = out_dict['mask']

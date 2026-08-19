@@ -1,0 +1,27 @@
+{
+  "baseline_score": 0.8327410310474045,
+  "calibration": {
+    "partition": "GOT-10k validation sequence ID modulo 3 == 1",
+    "baseline_ao": 0.8476782406744984,
+    "baseline_fps": 29.39145297617692,
+    "candidates": {
+      "1.10": {"ao": 0.8388122348518865, "fps": 30.858572861749042},
+      "1.20": {"ao": 0.8383686394480606, "fps": 29.9398095356599},
+      "1.30": {"ao": 0.8364085072562164, "fps": 29.034755734754118}
+    },
+    "selected_factor": 1.10
+  },
+  "selection": {
+    "partition": "GOT-10k validation sequence ID modulo 3 == 2",
+    "baseline_ao": 0.826291707494542,
+    "candidate_ao": 0.8229529135583163,
+    "ao_delta": -0.003338793936225738,
+    "baseline_fps": 51.938827505237434,
+    "candidate_fps": 61.420680964767705,
+    "minimum_required_ao_delta": 0.003,
+    "maximum_fps_loss_fraction": 0.05,
+    "gate_passed": false
+  },
+  "confirmation_run": false,
+  "b_test_used": false
+}
