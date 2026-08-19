@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Official LaSOT testing archive only. The script never writes inside the
-# archive and extracts into the data disk configured by lib/test/evaluation/local.py.
+# Official LaSOT testing archive only. This is a final held-out benchmark:
+# do not derive a development subset or tune method parameters from it. The
+# script never writes inside the archive and extracts into the data disk.
 archive="${1:-/root/autodl-tmp/experiment/.research-assets/downloads/LaSOTTesting.zip}"
 data_root="${2:-/root/autodl-tmp/experiment/.research-assets/data/lasot}"
 expected_md5="a9038384fd94d30e7ad6a1b7cf32ec73"
