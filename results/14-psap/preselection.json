@@ -1,0 +1,35 @@
+{
+  "candidate": "fartrack_sparse_psap",
+  "created_before_gated_calibration": true,
+  "data_partition": {
+    "calibration": "GOT-10k validation sequence numeric ID modulo 3 equals 1",
+    "selection": "GOT-10k validation sequence numeric ID modulo 3 equals 2",
+    "confirmation": "GOT-10k validation sequence numeric ID modulo 3 equals 0"
+  },
+  "mechanism": {
+    "signal": "mean absolute difference between FARTrack's native discrete-coordinate mode and expected-bin coordinate, divided by MODEL.RANGE",
+    "action": "change only the current-frame convex mode/mean output projection; template read/write, state history, search crop, and one frozen network forward remain unchanged",
+    "low_disagreement_alpha": 0.5,
+    "network_forwards_per_frame": 1,
+    "host_sync": "no scalar item synchronization; projection and gate remain CUDA tensors until the released output coordinate transfer"
+  },
+  "fixed_alpha_calibration": {
+    "alphas": [0.0, 0.5, 1.0],
+    "purpose": "endpoint sanity check before adaptive gate fitting",
+    "results_files": ["calibration_alpha_000.json", "calibration_alpha_050.json", "calibration_alpha_100.json"]
+  },
+  "threshold_rule": "q0.85 and q0.95 from node14 calibration diagnostic logs only",
+  "gated_policy_family": [
+    {"threshold_quantile": "q0.85", "high_disagreement_alpha": 0.0},
+    {"threshold_quantile": "q0.85", "high_disagreement_alpha": 1.0},
+    {"threshold_quantile": "q0.95", "high_disagreement_alpha": 0.0},
+    {"threshold_quantile": "q0.95", "high_disagreement_alpha": 1.0}
+  ],
+  "calibration_selection_rule": "highest calibration AO subject to aggregate FPS at least 95% of alpha=0.5 baseline; ties use q0.95 then lower high alpha",
+  "selection_gate": {
+    "minimum_ao_delta": 0.003,
+    "minimum_relative_fps": -0.05,
+    "run_confirmation_only_if": "both AO and FPS requirements are satisfied on selection"
+  },
+  "b_test_policy": "No B_test unless calibration, selection, and confirmation all satisfy the frozen policy gates."
+}
