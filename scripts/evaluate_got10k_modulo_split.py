@@ -27,7 +27,7 @@ def main():
     parser.add_argument("--alarm-log-dir", type=Path)
     args = parser.parse_args()
     names = [name for name in args.data_root.joinpath("list.txt").read_text().splitlines() if sequence_id(name) % 3 == args.remainder]
-    sequence_scores, overlaps = {}, []
+    sequence_scores, overlaps, elapsed_seconds = {}, [], 0.0
     for name in names:
         prediction = np.loadtxt(args.results_root / "got10k" / f"{name}.txt", delimiter="\t", ndmin=2)
         target = np.loadtxt(args.data_root / name / "groundtruth.txt", delimiter=",", ndmin=2)
@@ -36,7 +36,12 @@ def main():
         score = iou_xywh(prediction.astype(np.float64), target.astype(np.float64))
         overlaps.append(score)
         sequence_scores[name] = float(score.mean())
-    report = {"metric": "GOT-10k validation AO (mean frame IoU)", "remainder": args.remainder, "num_sequences": len(names), "num_frames": int(sum(map(len, overlaps))), "ao": float(np.concatenate(overlaps).mean()), "per_sequence_ao": sequence_scores}
+        time_path = args.results_root / "got10k" / f"{name}_time.txt"
+        if not time_path.exists():
+            raise FileNotFoundError(time_path)
+        elapsed_seconds += float(np.loadtxt(time_path, ndmin=1).sum())
+    num_frames = int(sum(map(len, overlaps)))
+    report = {"metric": "GOT-10k validation AO (mean frame IoU)", "remainder": args.remainder, "num_sequences": len(names), "num_frames": num_frames, "ao": float(np.concatenate(overlaps).mean()), "aggregate_fps": num_frames / elapsed_seconds, "per_sequence_ao": sequence_scores}
     if args.stats_path is not None:
         stats = json.loads(args.stats_path.read_text())
         report["two_view_stats"] = stats
