@@ -1,0 +1,8 @@
+{
+  "sources": [
+    {"id": "E001", "citation_key": "wang2026fartrack", "url": "https://arxiv.org/abs/2602.03214", "verified": true, "verified_on": "2026-08-19", "supports": "FARTrack architecture and reported upstream scope"},
+    {"id": "E002", "citation_key": "huang2021got10k", "url": "https://doi.org/10.1109/TPAMI.2019.2957464", "verified": true, "verified_on": "2026-08-19", "supports": "GOT-10k benchmark and one-shot protocol"},
+    {"id": "E003", "citation_key": "fan2019lasot", "url": "https://doi.org/10.1109/CVPR.2019.00552", "verified": true, "verified_on": "2026-08-19", "supports": "LaSOT benchmark characteristics"}
+  ],
+  "note": "Local draft evidence ledger. Numerical research results are bound to JSON files listed in research/EXPERIMENT_LOG.md."
+}
