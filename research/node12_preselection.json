@@ -1,0 +1,40 @@
+{
+  "node_id": 12,
+  "status": "pre-calibration",
+  "dataset": "GOT-10k validation",
+  "split_protocol": {
+    "calibration": "numeric sequence id modulo 3 equals 1",
+    "selection": "numeric sequence id modulo 3 equals 2",
+    "confirmation": "numeric sequence id modulo 3 equals 0"
+  },
+  "alarm": {
+    "signal": "native four-coordinate mean absolute disagreement between sequence-token and expected-bin decoders",
+    "threshold_source": "Node 7 passive logs on calibration split only",
+    "quantile": 0.95,
+    "comparison": ">= threshold",
+    "expected_calibration_alarm_rate_max": 0.06
+  },
+  "candidates": [
+    {"expanded_search_multiplier": 1.1},
+    {"expanded_search_multiplier": 1.2}
+  ],
+  "arbitration": {
+    "rule": "choose the candidate with lower native disagreement",
+    "tie_break": "choose nominal view",
+    "commit": "exactly one state, trajectory, and template update from the chosen candidate"
+  },
+  "calibration_selection_rule": {
+    "primary": "highest calibration AO",
+    "ties": "smaller expanded_search_multiplier",
+    "hard_gates": {
+      "aggregate_fps_loss_max_fraction": 0.1,
+      "alarm_rate_max_fraction": 0.06
+    }
+  },
+  "selection_gate": {
+    "ao_gain_min": 0.003,
+    "aggregate_fps_loss_max_fraction": 0.1,
+    "on_failure": "reject without confirmation or B_test"
+  },
+  "provenance": "This file fixes all policy choices before calibration. The numeric q95 threshold and frozen selected policy are written separately after reading only Node 7 calibration logs."
+}
