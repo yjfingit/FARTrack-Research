@@ -1,17 +1,22 @@
-\documentclass[10pt]{article}
-\usepackage[margin=1in]{geometry}
-\usepackage[T1]{fontenc}
-\usepackage{lmodern}
+% ICASSP 2027 draft. The official 2027 author kit was not linked from the
+% conference site on 2026-08-19; this uses the official ICASSP 2026 spconf
+% layout and must be checked against the 2027 kit before submission.
+\documentclass{article}
+\usepackage{spconf}
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{hyperref}
 \title{When Cautious Template Memory Hurts: A Reproducible\
 Training-Free Study of Frozen FARTrackSparse}
-\author{Anonymous research draft}
-\date{19 August 2026}
+\name{Anonymous Authors}
+\address{Anonymous Affiliation}
 
 \begin{document}
+\ninept
 \maketitle
+\begin{keywords}
+Visual object tracking, template memory, autoregressive tracking, negative results, reproducibility.
+\end{keywords}
 
 \begin{abstract}
 Template updates make visual trackers adapt to changing appearance, but can also
@@ -44,13 +49,13 @@ update distribution expected by a frozen tracker.  We do not replace this
 negative result with a post-hoc positive claim.
 
 \section{Protocol}
-\paragraph{Model and invariants.} Every experiment uses the released
+\noindent\textbf{Model and invariants.} Every experiment uses the released
 \texttt{FARTrackSparse\_ep0015.pth.tar} checkpoint, the original prediction
 decoder, the original result writer, and the same initialization boxes. The
 baseline tracker is exposed as \texttt{fartrack\_sparse\_research}; its
 upstream inference implementation is not modified.
 
-\paragraph{Development/test separation.} B\textsubscript{dev} is the public
+\noindent\textbf{Development/test separation.} B\textsubscript{dev} is the public
 GOT-10k validation split. GOT-10k was introduced as a high-diversity generic
 tracking benchmark with an explicit one-shot protocol \cite{huang2021got10k}.
 The development metric is mean frame IoU (AO) over 180 sequences and 21,007
@@ -61,7 +66,7 @@ It was checksum-verified and not accessed until all candidate decisions were
 frozen. The B\textsubscript{test} run is baseline-only because no candidate
 survived B\textsubscript{dev}.
 
-\paragraph{Statistics and speed.} We report the mean of per-frame IoUs. For a
+\noindent\textbf{Statistics and speed.} We report the mean of per-frame IoUs. For a
 candidate-baseline comparison, we resample the 180 per-sequence AO differences
 10,000 times with seed 20260819 and report a percentile 95\% interval. Aggregate
 FPS is total frames divided by the sum of saved per-frame times. These intervals
@@ -148,6 +153,6 @@ human authors must verify all text, select authorship, and approve any
 submission. No funding, conflict-of-interest, or authorship statements are
 asserted because they were not provided.
 
-\bibliographystyle{plain}
+\bibliographystyle{IEEEbib}
 \bibliography{references}
 \end{document}
