@@ -95,23 +95,23 @@ def build_fartrack_sparse(cfg, training=True):
         backbone,
     )
     load_from = cfg.MODEL.PRETRAIN_PTH
-    checkpoint = torch.load(load_from, map_location="cpu")
-    new_checkpoints = checkpoint['net'].copy()
-    for key in checkpoint['net'].keys():
-        pattern = re.compile(r'(\w+\.)*(norm\d+)(\.\w+)*')
-        if 'norm' in key and 'masknorm' not in key and 'norm.' not in key:
-            match = pattern.match(key)
-            if match:
-                norm_part = match.group(2)
-                masknorm_key = key.replace(norm_part, f'mask{norm_part}.norm')
-          
-            new_checkpoints[masknorm_key] = checkpoint['net'][key]
-    
-    checkpoint["net"] = new_checkpoints
-    missing_keys, unexpected_keys = model.load_state_dict(checkpoint["net"], strict=False)
-    print('Load pretrained model from: ' + load_from)
-    print(missing_keys)
-    print(unexpected_keys)
+    if load_from:
+        checkpoint = torch.load(load_from, map_location="cpu")
+        new_checkpoints = checkpoint['net'].copy()
+        for key in checkpoint['net'].keys():
+            pattern = re.compile(r'(\w+\.)*(norm\d+)(\.\w+)*')
+            if 'norm' in key and 'masknorm' not in key and 'norm.' not in key:
+                match = pattern.match(key)
+                if match:
+                    norm_part = match.group(2)
+                    masknorm_key = key.replace(norm_part, f'mask{norm_part}.norm')
+                    new_checkpoints[masknorm_key] = checkpoint['net'][key]
+
+        checkpoint["net"] = new_checkpoints
+        missing_keys, unexpected_keys = model.load_state_dict(checkpoint["net"], strict=False)
+        print('Load pretrained model from: ' + load_from)
+        print(missing_keys)
+        print(unexpected_keys)
     if 'sequence' in cfg.MODEL.PRETRAIN_FILE and training:
         print("i change myself")
         checkpoint = torch.load(cfg.MODEL.PRETRAIN_FILE, map_location="cpu")

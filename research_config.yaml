@@ -1,0 +1,7 @@
+task: >-
+  Training-free transactional autoregressive memory control for frozen FARTrackSparse.
+  Optimize fixed LaSOT development AUC; retain full LaSOT and GOT-10k test for frozen final validation.
+coordinator:
+  max_cycles: 3
+  ui:
+    interaction_mode: auto

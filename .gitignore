@@ -31,3 +31,5 @@ pretrained_models/*
 *.pth                   # Optional: Ignore all .pth weight files separately (if directory is not ignored)
 *.ckpt                  # Optional: Ignore all .ckpt checkpoint files separately
 *.pth.tar
+__pycache__/
+*.py[cod]
