@@ -1,0 +1,7 @@
+Evaluating    1 trackers on     1 sequences
+Tracker: fartrack_sparse_branch_motion fartrack_sparse_224_full 912 ,  Sequence: GOT-10k_Val_000001
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 47.086317723540425
+create tracking result dir: /root/autodl-tmp/experiment/.research-assets/output/test/tracking_results/fartrack_sparse_branch_motion/fartrack_sparse_224_full_912
+Done

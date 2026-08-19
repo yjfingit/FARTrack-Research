@@ -1,0 +1,10 @@
+{
+  "decision": "reject_before_confirmation",
+  "reason": "Frozen alpha=0.05 failed the predeclared selection AO gate.",
+  "selection_ao_delta": -0.001687821055881833,
+  "selection_minimum_ao_delta": 0.003,
+  "selection_relative_fps": 0.10621720611799179,
+  "selection_minimum_relative_fps": -0.05,
+  "confirmation_run": false,
+  "b_test_run": false
+}

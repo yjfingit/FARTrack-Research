@@ -364,7 +364,8 @@ class FARTrackSparse(BaseTracker):
 
         mask = out_dict['mask']
 
-        pred_boxes = (out_dict['seqs'][:, 0:4] + 0.5) / (self.bins - 1) - 0.5
+        seq_branch = (out_dict['seqs'][:, 0:4] + 0.5) / (self.bins - 1) - 0.5
+        pred_boxes = seq_branch
 
         pred_feat = out_dict['feat']
         pred = pred_feat.permute(1, 0, 2).reshape(-1, self.bins * self.range + 5)
@@ -377,7 +378,8 @@ class FARTrackSparse(BaseTracker):
 
         ans = out * mul
         ans = ans.sum(dim=-1)
-        ans = ans.permute(1, 0).to(pred)
+        feat_branch = ans.permute(1, 0).to(pred)
+        ans = feat_branch
         
         #pred_boxes = ans
 
@@ -392,7 +394,17 @@ class FARTrackSparse(BaseTracker):
         pred_new[1] = pred_boxes[1] + pred_new[3] / 2
  
 
-        pred_boxes = (pred_new * self.params.search_size / resize_factor).tolist()
+        materialize_prediction = getattr(self, "_materialize_predicted_box", None)
+        if materialize_prediction is None:
+            # Released tracker path: one unavoidable GPU-to-host conversion.
+            pred_boxes = (pred_new * self.params.search_size / resize_factor).tolist()
+        else:
+            # Candidate trackers may append a few already-computed branch values
+            # to this same transfer.  They must not call ``item`` or ``tolist``
+            # elsewhere, so this remains exactly one GPU synchronization.
+            pred_boxes = materialize_prediction(
+                pred_new, seq_branch, feat_branch, resize_factor
+            )
 
         self.state = clip_box(self.map_box_back(pred_boxes, resize_factor), H, W, margin=10)
 

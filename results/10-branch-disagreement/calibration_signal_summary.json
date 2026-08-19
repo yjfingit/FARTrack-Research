@@ -1,0 +1,10 @@
+{
+  "frames": 6531,
+  "quantiles": {
+    "q0.80": 0.003184966742992401,
+    "q0.85": 0.0037756040692329407,
+    "q0.90": 0.004729107022285461
+  },
+  "sequences": 60,
+  "source": "node7 passive branch-disagreement logs; calibration IDs only (id % 3 == 1)"
+}

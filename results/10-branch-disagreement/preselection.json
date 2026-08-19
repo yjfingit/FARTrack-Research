@@ -1,0 +1,36 @@
+{
+  "candidate": "fartrack_sparse_branch_motion",
+  "created_before_selection_run": true,
+  "data_partition": {
+    "calibration": "GOT-10k validation sequence numeric ID modulo 3 equals 1",
+    "selection": "GOT-10k validation sequence numeric ID modulo 3 equals 2",
+    "confirmation": "GOT-10k validation sequence numeric ID modulo 3 equals 0"
+  },
+  "calibration_signal_source": "/root/autodl-tmp/experiment/.research-assets/output/node7_reliability/logs",
+  "branch_disagreement_threshold": 0.0037756040692329407,
+  "branch_disagreement_threshold_rule": "q0.85 from node-7 passive branch_disagreement_l1 calibration logs only",
+  "calibration_schedule": {
+    "alpha_candidates": [0.05, 0.1, 0.25],
+    "observed_frame_ao_delta": {
+      "0.05": -0.011307185992021296,
+      "0.1": -0.013602463422071609,
+      "0.25": -0.02023249029965757
+    },
+    "selection_rule": "largest calibration AO; exact ties use lower alpha",
+    "chosen_alpha": 0.05
+  },
+  "fixed_policy": {
+    "network_forwards_per_frame": 1,
+    "signal": "mean L1 disagreement over four existing normalized sequence-coordinate and expected-bin-coordinate estimates",
+    "signal_materialization": "the four model crop values plus two 4-D branch estimates are appended to the released path's one .tolist transfer; no scalar .item transfer is used",
+    "high_disagreement_action": "host-side convex mix of current localization and one-step causal constant-velocity prior, alpha=0.05",
+    "low_disagreement_action": "released localization unchanged",
+    "template_updates": "released FARTrackSparse path unchanged"
+  },
+  "selection_gate": {
+    "minimum_ao_delta": 0.003,
+    "minimum_relative_fps": -0.05,
+    "run_confirmation_only_if": "both AO and FPS requirements are satisfied on selection"
+  },
+  "b_test_policy": "No B_test unless calibration, selection, and confirmation all satisfy the frozen policy gates."
+}
