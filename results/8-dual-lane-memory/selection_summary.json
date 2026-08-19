@@ -1,0 +1,26 @@
+{
+  "aggregate_fps": {
+    "baseline_read_only": 51.93882750523746,
+    "candidate": 43.852263862316114
+  },
+  "baseline_ao_frame_weighted": 0.826291707494542,
+  "candidate_ao_frame_weighted": 0.8222928972093285,
+  "confirmation_performed": false,
+  "decision": "rejected: fixed policy failed predeclared selection gate; no confirmation or B_test",
+  "degraded_sequences": 39,
+  "delta_ao_frame_weighted": -0.003998810285213428,
+  "delta_mean_per_sequence": 0.0011405435125163284,
+  "gate_passed": false,
+  "improved_sequences": 21,
+  "median_per_sequence_delta": -0.002019124144654827,
+  "paired_bootstrap": {
+    "ci95": [
+      -0.015115932318512802,
+      0.019437794408829225
+    ],
+    "resamples": 10000,
+    "seed": 20260820
+  },
+  "partition": "selection: id % 3 == 2",
+  "selection_gate": 0.003
+}

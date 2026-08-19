@@ -1,0 +1,25 @@
+{
+  "aggregate_fps": {
+    "baseline_read_only": 29.39145297617692,
+    "candidate": 25.01680663685746
+  },
+  "baseline_ao": 0.8476782406744984,
+  "candidate_ao": 0.8418390494741769,
+  "decision": "rejected_at_calibration; policy fixed before selection and did not clear a positive calibration sanity check",
+  "degraded_sequences": 39,
+  "delta_ao": -0.004991593075547655,
+  "improved_sequences": 21,
+  "median_per_sequence_delta": -0.004400793557921889,
+  "paired_bootstrap": {
+    "ci95": [
+      -0.03245966806252757,
+      0.019679894394302185
+    ],
+    "resamples": 10000,
+    "seed": 20260820
+  },
+  "partition": "calibration: id % 3 == 1",
+  "selection_gate": 0.003,
+  "selection_performed": false,
+  "tied_sequences": 0
+}
