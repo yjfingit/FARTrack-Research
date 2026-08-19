@@ -347,6 +347,13 @@ class FARTrackSparse(BaseTracker):
 
         search = self.preprocessor.process(x_patch_arr, x_amask_arr)
 
+        # Optional research controllers can alter only the template reader for
+        # this forward pass.  The released tracker has no such method, so its
+        # tensors and state follow the original path exactly.
+        prepare_template_read = getattr(self, "_prepare_template_read", None)
+        if prepare_template_read is not None:
+            prepare_template_read()
+
         with torch.no_grad():
             x_dict = search
 
@@ -365,6 +372,13 @@ class FARTrackSparse(BaseTracker):
         pred = pred_feat[0:4, :, 0:self.bins * self.range]
 
         out = pred.softmax(-1).to(pred)
+
+        # A passive post-distribution hook avoids a second forward pass.  It
+        # receives the already-materialized coordinate probabilities and must
+        # defer any read decision to a later frame.
+        observe_coordinate_distribution = getattr(self, "_observe_coordinate_distribution", None)
+        if observe_coordinate_distribution is not None:
+            observe_coordinate_distribution(out)
         #mul = torch.range((-1 * self.range * 0.5 + 0.5) + 1 / (self.bins * self.range), (self.range * 0.5 + 0.5) - 1 / (self.bins * self.range), 2 / (self.bins * self.range)).to(pred)
         mul = torch.range((-1 * self.range * 0.5 + 0.5), (self.range * 0.5 + 0.5) - 1 / (self.bins * self.range), 2 / (self.bins * self.range)).to(pred)
 
