@@ -73,7 +73,21 @@ class FARTrackSparse(BaseTracker):
     def __init__(self, params, dataset_name):
         super(FARTrackSparse, self).__init__(params)
         network = build_fartrack_sparse(params.cfg, training=False) # The checkpoint parameters are loaded in build_network
-        network.load_state_dict(torch.load(self.params.checkpoint, map_location='cpu')['net'], strict=True) # default strict=True
+        # A released checkpoint predates the opt-in CTQA adapter.  Preserve
+        # strict loading for the baseline, while permitting precisely those
+        # new adapter keys to be absent in an untrained compatibility run.
+        ctqa_enabled = params.cfg.MODEL.TRAJECTORY_QUERY_ADAPTER.ENABLED
+        missing, unexpected = network.load_state_dict(
+            torch.load(self.params.checkpoint, map_location='cpu')['net'],
+            strict=not ctqa_enabled,
+        )
+        if ctqa_enabled:
+            allowed = "backbone.trajectory_query_adapter."
+            if unexpected or any(not key.startswith(allowed) for key in missing):
+                raise RuntimeError(
+                    "CTQA checkpoint compatibility only permits missing CTQA adapter keys; "
+                    f"missing={missing}, unexpected={unexpected}"
+                )
         print("Load pretrained FARTrack from: ", self.params.checkpoint)
         self.cfg = params.cfg
         self.bins = params.cfg.MODEL.BINS

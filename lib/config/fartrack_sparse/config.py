@@ -12,6 +12,13 @@ cfg.MODEL.PRETRAIN_FILE = "mae_pretrain_vit_base.pth"
 cfg.MODEL.PRETRAIN_PTH = ""
 cfg.MODEL.EXTRA_MERGER = False
 
+# Opt-in causal trajectory conditioning.  The released sparse checkpoint was
+# trained without this adapter; its zero-initialized output preserves the
+# original model exactly until it receives optimization updates.
+cfg.MODEL.TRAJECTORY_QUERY_ADAPTER = edict()
+cfg.MODEL.TRAJECTORY_QUERY_ADAPTER.ENABLED = False
+cfg.MODEL.TRAJECTORY_QUERY_ADAPTER.HIDDEN_DIM = 192
+
 cfg.MODEL.RETURN_INTER = False
 cfg.MODEL.RETURN_STAGES = [2, 5, 8, 11]
 

@@ -13,6 +13,52 @@ from lib.models.fartrack_sparse.utils import combine_tokens, recover_tokens
 
 import time
 
+
+class CausalTrajectoryQueryAdapter(nn.Module):
+    """Maps prior coordinate tokens to four decoder-query biases.
+
+    The final projection is deliberately zero initialized.  This makes an
+    enabled adapter a checkpoint-compatible no-op at initialization while its
+    final layer still receives gradients on the first backward pass.
+    """
+
+    def __init__(self, embed_dim, hidden_dim, history_tokens=12, query_tokens=4):
+        super().__init__()
+        self.history_tokens = history_tokens
+        self.query_tokens = query_tokens
+        self.temporal_position = nn.Parameter(torch.empty(1, history_tokens, embed_dim))
+        nn.init.trunc_normal_(self.temporal_position, std=.02)
+        self.encoder = nn.Sequential(
+            nn.LayerNorm(embed_dim),
+            nn.Linear(embed_dim, hidden_dim),
+            nn.GELU(),
+            nn.Linear(hidden_dim, embed_dim),
+            nn.GELU(),
+        )
+        self.output = nn.Linear(embed_dim, query_tokens * embed_dim)
+        nn.init.zeros_(self.output.weight)
+        nn.init.zeros_(self.output.bias)
+
+    def forward(self, trajectory_tokens, word_embeddings):
+        if trajectory_tokens is None:
+            return None
+        if trajectory_tokens.ndim != 2 or trajectory_tokens.shape[1] != self.history_tokens:
+            raise ValueError(
+                f"Expected trajectory tokens [B, {self.history_tokens}], got "
+                f"{tuple(trajectory_tokens.shape)}"
+            )
+        # Do not call ``nn.Embedding.forward`` here: this backbone's shared
+        # embedding uses ``max_norm``, whose forward path renormalizes rows
+        # in-place.  A no-op adapter must never mutate checkpoint weights.
+        token_embeddings = F.embedding(
+            trajectory_tokens.long(),
+            word_embeddings.weight,
+            padding_idx=word_embeddings.padding_idx,
+        )
+        encoded = self.encoder(token_embeddings + self.temporal_position)
+        pooled = encoded.mean(dim=1)
+        return self.output(pooled).view(-1, self.query_tokens, token_embeddings.shape[-1])
+
 def generate_square_subsequent_mask(sz, sx, ss):
     r"""Generate a square mask for the sequence. The masked positions are filled with float('-inf').
         Unmasked positions are filled with float(0.0).
@@ -54,6 +100,7 @@ class BaseBackbone(nn.Module):
         self.add_cls_token = False
         self.add_sep_seg = False
         self.random_z = None
+        self.trajectory_query_adapter = None
 
     def finetune_track(self, cfg, patch_start_index=1):
 
@@ -64,6 +111,12 @@ class BaseBackbone(nn.Module):
         self.cat_mode = cfg.MODEL.BACKBONE.CAT_MODE
         self.return_inter = cfg.MODEL.RETURN_INTER
         self.add_sep_seg = cfg.MODEL.BACKBONE.SEP_SEG
+        adapter_cfg = cfg.MODEL.TRAJECTORY_QUERY_ADAPTER
+        if adapter_cfg.ENABLED:
+            self.trajectory_query_adapter = CausalTrajectoryQueryAdapter(
+                embed_dim=self.embed_dim,
+                hidden_dim=adapter_cfg.HIDDEN_DIM,
+            )
 
         # resize patch embedding
         if new_patch_size != self.patch_size:
@@ -284,6 +337,11 @@ class BaseBackbone(nn.Module):
         seqs_input_ = seqs_input_.to(torch.int64).to(x.device)
 
         tgt = self.word_embeddings(seqs_input_).permute(1, 0, 2)
+
+        trajectory_query_bias = None
+        if self.trajectory_query_adapter is not None:
+            trajectory_query_bias = self.trajectory_query_adapter(
+                trajectory, self.word_embeddings)
         
         x = self.patch_embed(x)
         x_feat = x.clone()
@@ -329,6 +387,8 @@ class BaseBackbone(nn.Module):
 
 
         tgt += query_seq_embed[:, :]
+        if trajectory_query_bias is not None:
+            tgt += trajectory_query_bias
 
         z = z_
 
