@@ -47,3 +47,9 @@ bash scripts/verify_got10k_train_mirror.sh
 The script intentionally does not remove downloaded parts or extract files.
 The archive layout and training-only root must be inspected after this gate and
 before setting `CTQA_DATA_VERIFIED=1` for the registered training launcher.
+
+After the joined archive passes `unzip -tq`, the two verified, re-downloadable
+parts may be removed to recover approximately 70.7 GB before extraction. This
+is the only planned deletion in data preparation; it must be logged with the
+verified digests and archive path. The joined archive is retained until the
+training-only tree has passed structural inspection.
