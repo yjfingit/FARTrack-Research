@@ -3,6 +3,8 @@
 from dataclasses import dataclass
 from typing import List, Sequence, Tuple
 
+import numpy as np
+import cv2
 import torch
 import torch.nn.functional as F
 
@@ -16,20 +18,21 @@ class TemplateRecord:
 
 
 class AppearanceDiverseReservoir:
-    """A bounded every-frame template store with deterministic max-min rebinding.
+    """A constant-size every-frame template store with chronological rebinding.
 
     The original anchor is immutable.  All later crops are accepted; when the
     capacity is reached the record nearest in untrained RGB descriptor space to
     another historical record is replaced.  Binding always retains anchor and
-    newest, then selects three maximally separated historical records and
-    places those slots in temporal order.
+    newest, then uses the three other cached historical records in temporal
+    order. Dynamic capacity is exactly four: the
+    active FARTrack set is anchor + three historical views + newest.
     """
 
-    def __init__(self, num_templates: int = 5, capacity: int = 64, token_count: int = 49):
+    def __init__(self, num_templates: int = 5, capacity: int = 4, token_count: int = 49):
         if num_templates != 5:
             raise ValueError("FARTrackSparse research configuration uses five template slots.")
-        if capacity < num_templates:
-            raise ValueError("capacity must retain at least one complete active set")
+        if capacity != num_templates - 1:
+            raise ValueError("dynamic capacity must equal the four non-anchor FARTrack slots")
         self.num_templates = num_templates
         self.capacity = capacity
         self.token_count = token_count
@@ -53,10 +56,25 @@ class AppearanceDiverseReservoir:
         rgb_grid = F.adaptive_avg_pool2d(template.detach().float(), output_size=(4, 4)).flatten(1).cpu()
         return F.normalize(rgb_grid, dim=1).squeeze(0)
 
-    def initialize(self, anchor_template: torch.Tensor):
+    @staticmethod
+    def descriptor_from_rgb(rgb_crop: np.ndarray) -> torch.Tensor:
+        """Vectorized fixed 4x4 RGB descriptor from FARTrack's CPU crop.
+
+        `sample_target` already creates this 112x112 RGB crop every frame.
+        Reusing it avoids adding a GPU pooling kernel and a synchronizing
+        device-to-host transfer to the tracker critical path.
+        """
+        height, width, channels = rgb_crop.shape
+        if channels != 3 or height % 4 or width % 4:
+            raise ValueError("expected an RGB crop with dimensions divisible by four")
+        grid = cv2.resize(rgb_crop, (4, 4), interpolation=cv2.INTER_AREA)
+        descriptor = torch.from_numpy(grid.astype(np.float32, copy=False).transpose(2, 0, 1).reshape(-1).copy())
+        return F.normalize(descriptor, dim=0)
+
+    def initialize(self, anchor_template: torch.Tensor, descriptor: torch.Tensor = None):
         dense = torch.ones((1, self.token_count), dtype=torch.bool, device=anchor_template.device)
-        self.anchor = TemplateRecord(anchor_template.detach().clone(), dense,
-                                     self.descriptor(anchor_template), frame_id=0)
+        self.anchor = TemplateRecord(anchor_template.detach(), dense,
+                                     self.descriptor(anchor_template) if descriptor is None else descriptor, frame_id=0)
         self.records = []
         self.newest = self.anchor
         self.writes = 0
@@ -72,26 +90,28 @@ class AppearanceDiverseReservoir:
         nearest_distance, _ = distances.min(dim=1)
         return min(range(len(records)), key=lambda i: (float(nearest_distance[i]), -records[i].frame_id))
 
-    def write(self, template: torch.Tensor, token_mask: torch.Tensor, frame_id: int):
+    def write(self, template: torch.Tensor, token_mask: torch.Tensor, frame_id: int,
+              descriptor: torch.Tensor = None):
         if self.anchor is None:
             raise RuntimeError("initialize must be called before write")
-        record = TemplateRecord(template.detach().clone(), token_mask.detach().bool().reshape(1, self.token_count).clone(),
-                                self.descriptor(template), int(frame_id))
+        record = TemplateRecord(template.detach(), token_mask.detach().bool().reshape(1, self.token_count),
+                                self.descriptor(template) if descriptor is None else descriptor, int(frame_id))
         self.writes += 1
         self.newest = record
         if len(self.records) < self.capacity:
             self.records.append(record)
             return
-        # The current observation is unconditionally admitted.  Select its
-        # eviction target after insertion, never reject the write itself.
+        # The current observation is unconditionally admitted. Replace one old
+        # record using one tiny 5x5 vectorized descriptor matrix; binding is O(1).
         candidates = self.records + [record]
-        evict = self._closest_redundant_index(candidates)
-        if evict == len(self.records):
-            # Preserve current-frame adaptation even if it resembles history.
-            evict = self._closest_redundant_index(self.records)
-            self.records[evict] = record
-        else:
-            self.records[evict] = record
+        descriptors = torch.stack([item.descriptor for item in candidates])
+        distances = torch.cdist(descriptors, descriptors, p=2)
+        distances.fill_diagonal_(float("inf"))
+        old_nearest = distances[:-1].min(dim=1).values
+        # Retain a broad chronological range on ties; never evict newest.
+        ages = torch.tensor([-item.frame_id for item in self.records], dtype=old_nearest.dtype)
+        evict = int(torch.argmin(old_nearest + ages * 1e-8).item())
+        self.records[evict] = record
         self.replacements += 1
 
     @staticmethod
@@ -118,9 +138,10 @@ class AppearanceDiverseReservoir:
         """Return FARTrack's five active templates, compatibility mask, and frame ids."""
         if self.anchor is None:
             raise RuntimeError("initialize must be called before bind")
+        # Reservoir replacement already enforces diversity. Binding only
+        # reorders the four cached records by time, with no descriptor work.
         historical = [record for record in self.records if record.frame_id != self.newest.frame_id]
-        selected = self._max_min_indices(historical, [self.anchor, self.newest], count=3)
-        middle = sorted((historical[index] for index in selected), key=lambda item: item.frame_id)
+        middle = sorted(historical, key=lambda item: item.frame_id)
         active = [self.anchor] + middle + [self.newest]
         # Early frames retain the baseline's repeated-template behavior while
         # exposing the same fixed five-slot shape to the frozen transformer.

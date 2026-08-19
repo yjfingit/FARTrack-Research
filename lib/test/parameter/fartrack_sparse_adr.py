@@ -5,5 +5,5 @@ from lib.test.parameter.fartrack_sparse_research import parameters as baseline_p
 
 def parameters(yaml_name: str):
     params = baseline_parameters(yaml_name)
-    params.appearance_reservoir_capacity = 64
+    params.appearance_reservoir_capacity = 4
     return params
