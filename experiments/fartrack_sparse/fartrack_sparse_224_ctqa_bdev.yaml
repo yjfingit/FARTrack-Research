@@ -1,0 +1,22 @@
+# Inference-only CTQA configuration.  This file contains no dataset sampling
+# settings; `tracking/test.py ... --dataset_name got10k_val` selects B_dev.
+MODEL:
+  BINS: 300
+  RANGE: 2
+  EXTENSION: 3
+  PRENUM: 3
+  PRETRAIN_FILE: ""
+  PRETRAIN_PTH: ""
+  EXTRA_MERGER: False
+  RETURN_INTER: False
+  TRAJECTORY_QUERY_ADAPTER:
+    ENABLED: True
+    HIDDEN_DIM: 192
+  BACKBONE:
+    TYPE: vit_tiny_patch16_224
+    STRIDE: 16
+TEST:
+  SEARCH_FACTOR: 4.0
+  SEARCH_SIZE: 224
+  TEMPLATE_FACTOR: 2.0
+  TEMPLATE_SIZE: 112

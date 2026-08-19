@@ -82,3 +82,39 @@ Expected artifacts for arm `A` and seed `S` are:
 /root/autodl-tmp/experiment/.research-assets/runs/ctqa_screen/A/seed_S/logs/fartrack_sparse-<config>.log
 /root/autodl-tmp/experiment/.research-assets/runs/ctqa_screen/A/seed_S/checkpoints/train/fartrack_sparse/<config>/FARTrackSparse_ep0001.pth.tar
 ```
+
+## Inference and B_dev-only evaluation
+
+After the screen has selected a frozen trained CTQA checkpoint, first run the
+synthetic checkpoint smoke test.  It strictly loads both that trained CTQA
+checkpoint (adapter enabled) and the released checkpoint (adapter disabled);
+it never reads a tracking dataset.
+
+```bash
+cd /tmp/arbor-worktrees-0/coordinator__n18-mechanism-causal-trajectory-quer-438901eb
+CUDA_VISIBLE_DEVICES=0 /root/autodl-tmp/experiment/.venvs/fartrack-research/bin/python \
+  scripts/verify_ctqa_inference_checkpoint.py \
+  --checkpoint /root/autodl-tmp/experiment/.research-assets/runs/ctqa_screen/ctqa/seed_1008/checkpoints/train/fartrack_sparse/fartrack_sparse_224_ctqa_got10k_screen/FARTrackSparse_ep0001.pth.tar
+```
+
+The only evaluation command prepared here is the frozen public development
+split, GOT-10k Val (B_dev).  It must be run after a selection decision; it does
+not invoke B_test or LaSOT Testing:
+
+```bash
+FARTRACK_CTQA_CHECKPOINT=/absolute/path/to/frozen_selected_ctqa_checkpoint.pth.tar \
+CUDA_VISIBLE_DEVICES=0 /root/autodl-tmp/experiment/.venvs/fartrack-research/bin/python \
+  tracking/test.py fartrack_sparse_ctqa fartrack_sparse_224_ctqa_bdev \
+  --dataset_name got10k_val --threads 0 --num_gpus 1
+
+/root/autodl-tmp/experiment/.venvs/fartrack-research/bin/python \
+  scripts/evaluate_got10k_val.py \
+  --data-root /root/autodl-tmp/experiment/.research-assets/data/got10k/val \
+  --results-root /root/autodl-tmp/experiment/.research-assets/output/test/tracking_results/fartrack_sparse_ctqa/fartrack_sparse_224_ctqa_bdev \
+  --output /root/autodl-tmp/experiment/.research-assets/output/ctqa_bdev_ao.json
+```
+
+The `fartrack_sparse_ctqa` entrypoint takes its checkpoint only from
+`FARTRACK_CTQA_CHECKPOINT`, thereby avoiding an accidental fallback to a
+released baseline.  The existing `fartrack_sparse_research` parameter remains
+the released-checkpoint baseline path with CTQA disabled.
