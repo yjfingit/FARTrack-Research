@@ -40,6 +40,8 @@ accessed B_test.
 | 14 | Posterior-shape adaptive projection | best gated calibration AO 0.837691 versus 0.847678 baseline | rejected before selection |
 | 15 | Disagreement-conditioned token quarantine | best q85 adaptive 75% pruning AO -0.009010 | rejected before selection |
 | 16 | Bidirectional sparse-flow arbitration | focused screen AO -0.002827 and triggered FPS -27.94% | rejected before calibration |
+| 17 | Coordinate-selective posterior projection | frozen selection AO -0.001162 (0.825130 versus 0.826292); FPS +17.12% | rejected before confirmation |
+| 18 | Causal trajectory-query adapter (CTQA) | implementation, checkpoint-compatibility, and matched training screen verified; training data acquisition in progress | pending training |
 
 Node 7 established that the frozen coordinate posterior is strongly predictive
 of failure but did not improve any box and did not alter the base tracker.
@@ -48,6 +50,18 @@ association as causal evidence. Their reports, exact frozen split definitions,
 commands, and raw-result paths are in `.arbor/sessions/rgb_tracking_training_free_20260819/experiments/7`
 through `14` in the coordinator worktree. Raw outputs remain on the data disk
 under `/root/autodl-tmp/experiment/.research-assets/output/`.
+
+Node 17 applied a single pre-registered, deployable horizontal-center correction
+only when coordinate-branch disagreement was high. Its earlier passive analysis
+did not translate into a causal AO gain on the frozen selection partition, so it
+was not confirmed or evaluated on B_test. Node 18 is qualitatively different:
+inspection showed that the sparse backbone receives a trajectory tensor but
+replaces it with the command tokens before use. CTQA makes that already exposed
+history trainable through a zero-initialized query adapter. It has no result yet:
+the registered experiment is a matched continued-training screen on GOT-10k
+train, with three fixed seeds and 512 updates per arm and seed. The B_dev-only
+inference path requires an explicit trained checkpoint and is separate from the
+released-checkpoint baseline.
 
 Node 15 verified that the native mask levels retain 37/25/13/5 of 49 template
 tokens for 25/50/75/90% pruning respectively. Even rare q85 adaptive stronger
