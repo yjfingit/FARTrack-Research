@@ -16,6 +16,7 @@ class TwoViewArbitrationTests(unittest.TestCase):
         tracker.two_view_threshold = threshold
         tracker.two_view_expansion = 1.2
         tracker.two_view_stats = {"frames": 0, "alarms": 0, "expanded_chosen": 0}
+        tracker.two_view_log_path = None
         tracker.frame_id = 0
         tracker.state = [10.0, 10.0, 20.0, 20.0]
         tracker.params = type("Params", (), {"search_factor": 4.0})()

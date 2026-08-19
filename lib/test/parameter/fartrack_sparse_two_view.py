@@ -16,4 +16,5 @@ def parameters(yaml_name: str):
         os.environ.get("FARTRACK_TWO_VIEW_THRESHOLD", "0.006562486290931702")
     )
     params.two_view_expansion = float(os.environ.get("FARTRACK_TWO_VIEW_EXPANSION", "1.1"))
+    params.two_view_log_dir = os.environ.get("FARTRACK_TWO_VIEW_LOG_DIR", "")
     return params

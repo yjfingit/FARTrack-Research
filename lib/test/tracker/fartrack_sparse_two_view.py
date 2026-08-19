@@ -6,7 +6,9 @@ template history.  Both forwards are side-effect free; the selected candidate
 is committed exactly once.
 """
 
+import json
 import os
+from pathlib import Path
 
 import torch
 
@@ -22,6 +24,17 @@ class FARTrackSparseTwoView(FARTrackSparse):
         self.two_view_threshold = float(getattr(params, "two_view_disagreement_threshold", 0.0))
         self.two_view_expansion = float(getattr(params, "two_view_expansion", 1.1))
         self.two_view_stats = {"frames": 0, "alarms": 0, "expanded_chosen": 0}
+        log_dir = getattr(params, "two_view_log_dir", "")
+        self.two_view_log_dir = Path(log_dir) if log_dir else None
+        self.two_view_log_path = None
+
+    def initialize(self, image, info: dict, name: str):
+        result = super().initialize(image, info, name)
+        if self.two_view_enabled and self.two_view_log_dir is not None:
+            self.two_view_log_dir.mkdir(parents=True, exist_ok=True)
+            self.two_view_log_path = self.two_view_log_dir / f"{name}.jsonl"
+            self.two_view_log_path.unlink(missing_ok=True)
+        return result
 
     def _history_seq_input(self, prior_state, resize_factor):
         """Encode prior states in the coordinate system of one search crop."""
@@ -121,6 +134,14 @@ class FARTrackSparseTwoView(FARTrackSparse):
             chosen, expanded_chosen = self._choose_candidate(nominal, expanded)
             self.two_view_stats["expanded_chosen"] += int(expanded_chosen)
         self._commit_candidate(image, chosen)
+        if self.two_view_log_path is not None:
+            with self.two_view_log_path.open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps({
+                    "frame_index": self.frame_id,
+                    "nominal_disagreement": nominal["disagreement"],
+                    "alarm": nominal["disagreement"] >= self.two_view_threshold,
+                    "expanded_chosen": expanded_chosen,
+                }, sort_keys=True) + "\n")
         return {"target_bbox": self.state}
 
     def track(self, image, info: dict = None):
