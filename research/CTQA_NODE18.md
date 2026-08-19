@@ -71,9 +71,16 @@ four DataLoader processes to one internal CPU thread each.
 cd /tmp/arbor-worktrees-0/coordinator__n18-mechanism-causal-trajectory-quer-438901eb
 for seed in 1008 2026 3407; do
   CTQA_DATA_VERIFIED=1 bash scripts/launch_ctqa_screen.sh control "$seed"
-  CTQA_DATA_VERIFIED=1 bash scripts/launch_ctqa_screen.sh ctqa "$seed"
+ CTQA_DATA_VERIFIED=1 bash scripts/launch_ctqa_screen.sh ctqa "$seed"
 done
 ```
+
+**Development-split pre-registration.** Seed `2026` is the one fixed B_dev
+screen seed for both arms.  Seeds `1008` and `3407` are retained exclusively
+to report training reproducibility (loss/optimization behavior); neither may
+be selected, ranked, or substituted using B_dev.  The B_dev decision compares
+only the paired seed-2026 checkpoints, with no per-seed or per-checkpoint
+search based on development performance.
 
 Expected artifacts for arm `A` and seed `S` are:
 
@@ -114,7 +121,18 @@ CUDA_VISIBLE_DEVICES=0 /root/autodl-tmp/experiment/.venvs/fartrack-research/bin/
   --output /root/autodl-tmp/experiment/.research-assets/output/ctqa_bdev_ao.json
 ```
 
+The matched continued-training control uses the same B_dev protocol through a
+separate explicit checkpoint variable:
+
+```bash
+FARTRACK_CONTROL_CHECKPOINT=/absolute/path/to/frozen_control_seed_2026_checkpoint.pth.tar \
+CUDA_VISIBLE_DEVICES=0 /root/autodl-tmp/experiment/.venvs/fartrack-research/bin/python \
+  tracking/test.py fartrack_sparse_continue fartrack_sparse_224_continue_bdev \
+  --dataset_name got10k_val --threads 0 --num_gpus 1
+```
+
 The `fartrack_sparse_ctqa` entrypoint takes its checkpoint only from
 `FARTRACK_CTQA_CHECKPOINT`, thereby avoiding an accidental fallback to a
-released baseline.  The existing `fartrack_sparse_research` parameter remains
-the released-checkpoint baseline path with CTQA disabled.
+released baseline.  Its matched control similarly requires
+`FARTRACK_CONTROL_CHECKPOINT`.  The existing `fartrack_sparse_research`
+parameter remains the released-checkpoint baseline path with CTQA disabled.

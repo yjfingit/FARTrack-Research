@@ -5,6 +5,7 @@ from pathlib import Path
 
 from lib.config.fartrack_sparse.config import cfg, update_config_from_file
 from lib.test.tracker.fartrack_sparse_ctqa import get_tracker_class
+from lib.test.tracker.fartrack_sparse_continue import get_tracker_class as get_control_tracker_class
 from lib.test.tracker.fartrack_sparse import FARTrackSparse
 
 
@@ -20,3 +21,14 @@ def test_ctqa_bdev_configuration_enables_only_the_adapter():
 
 def test_ctqa_tracker_entrypoint_reuses_audited_sparse_tracker():
     assert get_tracker_class() is FARTrackSparse
+
+
+def test_control_tracker_entrypoint_reuses_audited_sparse_tracker():
+    assert get_control_tracker_class() is FARTrackSparse
+
+
+def test_control_bdev_configuration_keeps_ctqa_disabled():
+    local = deepcopy(cfg)
+    config = Path(__file__).resolve().parents[1] / "experiments/fartrack_sparse/fartrack_sparse_224_continue_bdev.yaml"
+    update_config_from_file(str(config), base_cfg=local)
+    assert local.MODEL.TRAJECTORY_QUERY_ADAPTER.ENABLED is False
