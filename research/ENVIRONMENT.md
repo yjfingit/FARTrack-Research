@@ -28,3 +28,18 @@ FARTRACK_OPENCV_THREADS=0
 These caps prevent OpenMP/BLAS/OpenCV thread multiplication across worker
 processes. They are a throughput-safety setting, not a change to model
 training, data, tracker, or evaluation protocol.
+
+## Training Data Provenance Gate
+
+The pending GOT-10k training mirror is downloaded under
+`/root/autodl-tmp/experiment/.research-assets/datasets/got10k-train-mirror`.
+Before extraction, validate both supplied split-file digests and the joined ZIP
+directory with:
+
+```bash
+bash scripts/verify_got10k_train_mirror.sh
+```
+
+The script intentionally does not remove downloaded parts or extract files.
+The archive layout and training-only root must be inspected after this gate and
+before setting `CTQA_DATA_VERIFIED=1` for the registered training launcher.
