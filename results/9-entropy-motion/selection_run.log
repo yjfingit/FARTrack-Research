@@ -1,0 +1,244 @@
+partition 2 sequence_ids [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38, 41, 44, 47, 50, 53, 56, 59, 62, 65, 68, 71, 74, 77, 80, 83, 86, 89, 92, 95, 98, 101, 104, 107, 110, 113, 116, 119, 122, 125, 128, 131, 134, 137, 140, 143, 146, 149, 152, 155, 158, 161, 164, 167, 170, 173, 176, 179]
+Evaluating    1 trackers on    60 sequences
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000002
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000017
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000032
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 24.573546005063985
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000035
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 24.161449922947035
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000020
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 25.767567827253576
+create tracking result dir: /root/autodl-tmp/experiment/.research-assets/output/test/tracking_results/fartrack_sparse_entropy_motion/fartrack_sparse_224_full_904
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000005
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 36.23117334051654
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000023
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 34.517453163864666
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000038
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 32.55280497779668
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000026
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 45.70719863224952
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000029
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 11.944429819938454
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000008
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 25.996896501192477
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000041
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 25.971128975947487
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000047
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 9.676412965924216
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000044
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 22.89313009479087
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000050
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 9.043149557285275
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000011
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 23.309396817206775
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000062
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 21.965447723300247
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000014
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 30.343133518634346
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000053
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 32.83983971498902
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000077
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 18.302952276366067
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000056
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 35.72134904493197
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000080
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 27.173659846372413
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000059
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 30.631637149641353
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000083
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 31.634726541727737
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000065
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 33.54999780862296
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000092
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 30.35056998711171
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000086
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 23.723302075393477
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000095
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 7.221512483495775
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000068
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 30.250990555274424
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000098
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 18.707455458088106
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000089
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 19.87892931713907
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000071
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 22.14704631122666
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000107
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 28.071306066307017
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000074
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 20.651244752362093
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000101
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 23.09862566780349
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000104
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 29.031718821370212
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000137
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 42.170648016816074
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000140
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 21.38544589209592
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000143
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 15.724826001693385
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000146
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 35.004691043248904
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000149
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 33.36900378287892
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000152
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 32.45905102932111
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000110
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 42.337909663683575
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000155
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 37.49600542423954
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000158
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 13.383349504768212
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000113
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 36.440579915339185
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000161
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 35.79255094857999
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000164
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 31.475616275910184
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000122
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 36.160885482620586
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000167
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 33.563048066438284
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000170
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 8.405633238993804
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000125
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 33.305889721750916
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000116
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 29.99622565381278
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000173
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 27.479565825465095
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000128
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 28.17105211723628
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000131
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 24.174153659267574
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000134
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 10.94665509107553
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000119
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 28.858298565038417
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000176
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 30.021177512846858
+Tracker: fartrack_sparse_entropy_motion fartrack_sparse_224_full 904 ,  Sequence: GOT-10k_Val_000179
+i use vit_tiny
+Load pretrained FARTrack from:  /root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar
+FPS: 26.118506190679852
+FPS: 86.63705551702952
+FPS: 29.94061637079073
+Done

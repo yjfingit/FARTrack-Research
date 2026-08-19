@@ -1,0 +1,35 @@
+{
+  "candidate": "fartrack_sparse_entropy_motion",
+  "created_before_selection_run": true,
+  "data_partition": {
+    "calibration": "GOT-10k validation sequence numeric ID modulo 3 equals 1",
+    "selection": "GOT-10k validation sequence numeric ID modulo 3 equals 2",
+    "confirmation": "GOT-10k validation sequence numeric ID modulo 3 equals 0"
+  },
+  "calibration_signal_source": "/root/autodl-tmp/experiment/.research-assets/output/node7_reliability/logs",
+  "entropy_threshold": 0.4000612944364548,
+  "entropy_threshold_rule": "q0.85 from node-7 passive coordinate-entropy calibration logs only",
+  "calibration_schedule": {
+    "alpha_candidates": [0.1, 0.25, 0.5],
+    "observed_frame_ao_delta": {
+      "0.1": -0.005445957953398861,
+      "0.25": -0.018927276515340985,
+      "0.5": -0.05214754173590774
+    },
+    "selection_rule": "largest calibration AO; exact ties use lower alpha",
+    "chosen_alpha": 0.1
+  },
+  "fixed_policy": {
+    "network_forwards_per_frame": 1,
+    "motion_prior": "one-step constant-velocity xywh extrapolation from the two prior accepted tracker states",
+    "high_entropy_action": "GPU-resident convex mix of current localization and causal prior, alpha=0.1",
+    "low_entropy_action": "released localization unchanged",
+    "template_updates": "released FARTrackSparse path unchanged"
+  },
+  "selection_gate": {
+    "minimum_ao_delta": 0.003,
+    "minimum_relative_fps": -0.05,
+    "run_confirmation_only_if": "both AO and FPS requirements are satisfied on selection"
+  },
+  "b_test_policy": "No B_test unless calibration, selection, and confirmation all satisfy the frozen policy gates."
+}

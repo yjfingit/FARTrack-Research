@@ -1,0 +1,28 @@
+{
+  "aggregate_fps": {
+    "baseline_read_only": 29.39145297617692,
+    "candidate": 17.229233421450495,
+    "relative_change": -0.41380123550150605
+  },
+  "alpha": 0.25,
+  "baseline_ao": 0.8476782406744984,
+  "candidate_ao": 0.8287509641591574,
+  "degraded_sequences": 24,
+  "delta_ao": -0.018927276515340985,
+  "improved_sequences": 7,
+  "mean_per_sequence_delta": -0.021605227515820117,
+  "median_per_sequence_delta": 0.0,
+  "paired_bootstrap": {
+    "ci95": [
+      -0.0467294392969535,
+      -0.004466607276935861
+    ],
+    "resamples": 10000,
+    "seed": 20260820
+  },
+  "partition": {
+    "id_modulo": 3,
+    "id_remainder": 1
+  },
+  "tied_sequences": 29
+}

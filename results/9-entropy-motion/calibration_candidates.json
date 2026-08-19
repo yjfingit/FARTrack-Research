@@ -1,0 +1,14 @@
+{
+  "protocol": "All candidate mixing weights below are evaluated only on public GOT-10k validation calibration IDs (numeric ID modulo 3 equals 1). The entropy threshold is derived solely from node-7 passive calibration logs.",
+  "threshold": 0.4000612944364548,
+  "threshold_rule": "coordinate entropy q0.85 of node-7 calibration logs",
+  "candidate_alphas": [0.10, 0.25, 0.50],
+  "selection_rule": "Choose the alpha with the largest calibration frame-weighted AO improvement over its immutable-baseline partition result; break exact ties toward smaller alpha. The chosen alpha must be frozen in preselection.json before selection runs.",
+  "runtime_invariants": {
+    "network_forwards_per_frame": 1,
+    "motion_prior": "one-step constant-velocity xywh extrapolation from two previous accepted tracker states",
+    "high_entropy_action": "mix model mapped xywh state with motion prior using alpha",
+    "low_entropy_action": "delegate the model mapped xywh state unchanged",
+    "template_updates": "released FARTrackSparse path unchanged"
+  }
+}

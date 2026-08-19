@@ -372,6 +372,12 @@ class FARTrackSparse(BaseTracker):
         pred = pred_feat[0:4, :, 0:self.bins * self.range]
 
         out = pred.softmax(-1).to(pred)
+        # Optional research observers can reuse the released coordinate
+        # probabilities.  With no observer (all baseline trackers), this is a
+        # no-op and does not alter localization, state, or template updates.
+        observe_probabilities = getattr(self, "_observe_coordinate_probabilities", None)
+        if observe_probabilities is not None:
+            observe_probabilities(out)
         #mul = torch.range((-1 * self.range * 0.5 + 0.5) + 1 / (self.bins * self.range), (self.range * 0.5 + 0.5) - 1 / (self.bins * self.range), 2 / (self.bins * self.range)).to(pred)
         mul = torch.range((-1 * self.range * 0.5 + 0.5), (self.range * 0.5 + 0.5) - 1 / (self.bins * self.range), 2 / (self.bins * self.range)).to(pred)
 
@@ -390,6 +396,13 @@ class FARTrackSparse(BaseTracker):
         pred_new[3] = pred_boxes[3] - pred_boxes[1]
         pred_new[0] = pred_boxes[0] + pred_new[2] / 2
         pred_new[1] = pred_boxes[1] + pred_new[3] / 2
+
+        # A research-only subclass may causally adjust this GPU-resident
+        # cxcywh state.  Released trackers have no hook, retaining precisely
+        # the original path and its single host materialization below.
+        adjust_predicted_box = getattr(self, "_adjust_predicted_box", None)
+        if adjust_predicted_box is not None:
+            pred_new = adjust_predicted_box(pred_new, resize_factor)
  
 
         pred_boxes = (pred_new * self.params.search_size / resize_factor).tolist()

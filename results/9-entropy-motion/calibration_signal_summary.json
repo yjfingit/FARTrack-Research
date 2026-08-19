@@ -1,0 +1,10 @@
+{
+  "frames": 6531,
+  "quantiles": {
+    "q0.80": 0.3832656741142273,
+    "q0.85": 0.4000612944364548,
+    "q0.90": 0.4264524579048157
+  },
+  "sequences": 60,
+  "source": "node7 passive coordinate-entropy logs; calibration IDs only (id % 3 == 1)"
+}
