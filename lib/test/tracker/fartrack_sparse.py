@@ -229,6 +229,14 @@ class FARTrackSparse(BaseTracker):
         mask_temp = mask_temp.unsqueeze(-1).expand(-1, -1, 445).permute(0, 2, 1)
         self.mask = mask_temp
 
+    def adjust_candidate_state(self, image, candidate_state, branch_disagreement):
+        """Optional research hook. The released tracker is an exact identity."""
+        return candidate_state
+
+    def after_track_frame(self, image):
+        """Optional research hook invoked after a successful frame update."""
+        return None
+
     def initialize(self, image, info: dict, name:str):
         # forward the template once
         current_file_path = os.path.abspath(__file__)
@@ -375,6 +383,7 @@ class FARTrackSparse(BaseTracker):
         #pred_boxes = ans
 
         pred_boxes = (ans + pred_boxes) / 2
+        branch_disagreement = float(torch.mean(torch.abs(ans - pred_boxes)).item() * 2.0)
 
         pred_boxes = pred_boxes.view(-1, 4).mean(dim=0)
 
@@ -387,7 +396,8 @@ class FARTrackSparse(BaseTracker):
 
         pred_boxes = (pred_new * self.params.search_size / resize_factor).tolist()
 
-        self.state = clip_box(self.map_box_back(pred_boxes, resize_factor), H, W, margin=10)
+        candidate_state = clip_box(self.map_box_back(pred_boxes, resize_factor), H, W, margin=10)
+        self.state = self.adjust_candidate_state(image, candidate_state, branch_disagreement)
 
         z_patch_arr, resize_factor, z_amask_arr = sample_target(image, self.state, self.params.template_factor,
                                                                 output_sz=self.params.template_size)  # (x1, y1, w, h)
@@ -404,6 +414,8 @@ class FARTrackSparse(BaseTracker):
                     self.store_result[i] = self.store_result[i + 1]
                 else:
                     self.store_result[i] = self.state.copy() 
+
+        self.after_track_frame(image)
 
         # for debug
         if self.debug:
