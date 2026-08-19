@@ -21,12 +21,13 @@ Visual object tracking, template memory, autoregressive tracking, negative resul
 \begin{abstract}
 Template updates make visual trackers adapt to changing appearance, but can also
 propagate a localization error.  We conduct a controlled, training-free study
-of five memory interventions for a frozen FARTrackSparse checkpoint.  The
+of six inference-time candidate directions for a frozen FARTrackSparse checkpoint.  The
 development protocol uses the public GOT-10k validation set (180 sequences,
 21,007 frames), while full LaSOT Testing is held out until configuration
-freezing.  Three complete development evaluations show that hard write holding,
-counterfactual write rejection, and stable-anchor recovery reduce mean frame
-IoU by 0.00823, 0.02000, and 0.03204, respectively, relative to the immutable
+freezing.  Four complete development evaluations show that hard write holding,
+counterfactual write rejection, stable-anchor recovery, and a logarithmic template
+sampler reduce mean frame IoU by 0.00823, 0.02000, 0.03204, and 0.00273,
+respectively, relative to the immutable
 baseline.  Two soft rebinding variants fail fixed-screen directionality or
 efficiency gates.  Thus no proposed intervention is claimed as an improvement.
 The contribution of this draft is a transparent negative-result record,
@@ -51,9 +52,9 @@ negative result with a post-hoc positive claim.
 
 \section{Protocol}
 \noindent\textbf{Model and invariants.} Every experiment uses the released
-\texttt{FARTrackSparse\_ep0015.pth.tar} checkpoint, the original prediction
-decoder, the original result writer, and the same initialization boxes. The
-baseline tracker is exposed as \texttt{fartrack\_sparse\_research}; its
+FARTrackSparse epoch-15 checkpoint, the original prediction decoder, the
+original result writer, and the same initialization boxes. Its immutable
+baseline entry point is documented with the artifacts; the
 upstream inference implementation is not modified.
 
 \noindent\textbf{Development/test separation.} B\textsubscript{dev} is the public
@@ -90,6 +91,8 @@ population inference.
   template slots are rebound using untrained RGB descriptor medoids.
   \item \textbf{Appearance-diverse rebinding}: all frames are written, while
   slots retain chronological max--min RGB descriptor exemplars.
+  \item \textbf{Logarithmic sampler}: the upstream sampler is selected without
+  adding a model forward or changing the write/mask implementation.
 \end{enumerate}
 
 All implementations are separate tracker entry points. Focused unit tests and
@@ -102,6 +105,7 @@ version was evaluated.
 \begin{table}[h]
 \centering
 \caption{Complete B\textsubscript{dev} results. AO is mean frame IoU.}
+\resizebox{\columnwidth}{!}{%
 \begin{tabular}{lrrrr}
 \toprule
 Method & AO & $\Delta$ AO & 95\% paired interval & FPS \\
@@ -113,6 +117,7 @@ Stable-anchor recovery & 0.797473 & -0.032038 & [-0.050311, -0.015034] & 40.90 \
 Logarithmic sampler & 0.830650 & -0.002730 & [-0.010716, 0.003984] & 31.32 \\
 \bottomrule
 \end{tabular}
+}
 \end{table}
 
 \begin{figure}[h]
@@ -141,7 +146,12 @@ The shared pattern is that hard intervention can sacrifice normal appearance
 adaptation more often than it prevents memory pollution. Uncertainty, motion
 inconsistency, and disagreement are not calibrated error probabilities for a
 frozen model. Further, changing the effective template distribution may create
-an input regime unseen during training. This study does not establish that
+an input regime unseen during training. For the closest-to-neutral logarithmic
+sampler, sequence-level AO changes have weak Spearman associations with public
+GOT-10k labels and simple geometric summaries (absolute $\rho\leq0.102$ for
+absence, cover-label mean, cut fraction, relative motion, scale variation, and
+length). Thus no single observed attribute identifies when the fixed rule helps.
+This study does not establish that
 template control is never useful; it only rejects these implementations and
 fixed settings on the stated protocol.
 
@@ -153,7 +163,7 @@ performed.
 
 \section{Reproducibility and Disclosure}
 All source changes, commands, structured metrics, logs, and immutable checkpoint
-path are documented in \texttt{research/EXPERIMENT\_LOG.md}. Data archives and
+path are documented in the accompanying experiment log. Data archives and
 outputs reside on the data disk. This draft was prepared with AI assistance;
 human authors must verify all text, select authorship, and approve any
 submission. No funding, conflict-of-interest, or authorship statements are

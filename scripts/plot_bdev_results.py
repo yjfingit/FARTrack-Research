@@ -25,12 +25,14 @@ def main() -> None:
         "TRM-FAR": "got10k_val_node1_trm_ao.json",
         "Counterfactual": "got10k_val_node2_cf_ao.json",
         "Anchor recovery": "got10k_val_node3_sar_ao.json",
+        "Log sampler": "got10k_val_node6_logarithmic_ao.json",
     }
     ao = {name: load_ao(args.assets / filename) for name, filename in filenames.items()}
-    fps = {"Baseline": 40.073770150883185, "TRM-FAR": 42.160655418265875,
-           "Counterfactual": 23.467610737504696, "Anchor recovery": 40.902096149190406}
+    fps = {"Baseline": 40.08210429921829, "TRM-FAR": 42.160655418265875,
+           "Counterfactual": 23.467610737504696, "Anchor recovery": 40.902096149190406,
+           "Log sampler": 31.315525840882607}
     names = list(filenames)
-    colors = ["#4C78A8", "#D95F02", "#D95F02", "#D95F02"]
+    colors = ["#4C78A8", "#D95F02", "#D95F02", "#D95F02", "#D95F02"]
 
     figure, axes = plt.subplots(1, 2, figsize=(10, 3.6), constrained_layout=True)
     delta = np.array([ao[name] - ao["Baseline"] for name in names]) * 100
