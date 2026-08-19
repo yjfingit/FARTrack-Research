@@ -354,6 +354,13 @@ class FARTrackSparse(BaseTracker):
                 template=self.z_dict1, search=x_dict.tensors, ce_template_mask=self.box_mask_z,
                 seq_input=seqs_out, stage="inference", search_feature=None, mask=self.mask)
 
+        # Research instrumentation is deliberately an observer: subclasses may
+        # inspect the returned tensors here, but it must not alter any state or
+        # tensor used by the released tracking path below.
+        record_reliability = getattr(self, "_record_reliability", None)
+        if record_reliability is not None:
+            record_reliability(out_dict)
+
 
         mask = out_dict['mask']
 
