@@ -126,7 +126,8 @@ class FARTrackSparse(BaseTracker):
         if not hasattr(self, 'stored_templates'):
             self.stored_templates = [] 
             self.stored_templates.append(self.z_dict1[0])  
-            self.store_mask = [] # mask 25%
+            self.store_mask = [] # mask consumed by the released reader
+            self.store_mask_25 = [] # raw 25% mask, retained for research readers
             self.store_mask_50 = [] # mask 50%
             self.store_mask_75 = []
             self.store_mask_90 = []
@@ -136,7 +137,13 @@ class FARTrackSparse(BaseTracker):
         if self.frame_id >= 1:
             self.stored_templates.append(new_z)
 
-            self.store_mask.append(mask[0]) # (mask[0])
+            # Keep every model-produced pruning level.  The released reader
+            # still consumes ``store_mask``; a candidate can substitute only
+            # this write through an optional, CUDA-resident hook.
+            select_template_mask = getattr(self, "_select_template_mask", None)
+            selected_mask = mask[0] if select_template_mask is None else select_template_mask(mask)
+            self.store_mask.append(selected_mask)
+            self.store_mask_25.append(mask[0])
             self.store_mask_50.append(mask[1])
             self.store_mask_75.append(mask[2])
             self.store_mask_90.append(mask[3])
@@ -371,6 +378,13 @@ class FARTrackSparse(BaseTracker):
         ans = out * mul
         ans = ans.sum(dim=-1)
         ans = ans.permute(1, 0).to(pred)
+
+        # A research tracker may prepare the mask for the template written by
+        # this same forward.  The released tracker has no hook and therefore
+        # follows exactly the original localization and write path.
+        prepare_template_mask = getattr(self, "_prepare_template_mask", None)
+        if prepare_template_mask is not None:
+            prepare_template_mask(mask, pred_boxes, ans)
         
         #pred_boxes = ans
 

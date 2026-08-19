@@ -1,0 +1,36 @@
+{
+  "candidate": "fartrack_sparse_dctq",
+  "created_before_calibration": true,
+  "data_partition": {
+    "calibration": "GOT-10k validation numeric sequence ID modulo 3 equals 1",
+    "selection": "GOT-10k validation numeric sequence ID modulo 3 equals 2",
+    "confirmation": "GOT-10k validation numeric sequence ID modulo 3 equals 0"
+  },
+  "mechanism": {
+    "signal": "mean absolute disagreement of the existing sequence and feature coordinate branches",
+    "threshold": 0.0037756040692329407,
+    "action": "attach one of FARTrack's four already emitted native attention-pruning masks to the just-written template; template identity, write timing, chronological sampler, current box and one forward remain unchanged",
+    "native_pruning_levels_percent": [25, 50, 75, 90],
+    "host_sync": "no new softmax, item(), or tolist(); trigger and mask selection remain CUDA tensors"
+  },
+  "calibration_candidates": {
+    "baseline": {"enabled": false},
+    "static_diagnostics": [
+      {"level_percent": 50},
+      {"level_percent": 75},
+      {"level_percent": 90}
+    ],
+    "adaptive_family": [
+      {"threshold": 0.0037756040692329407, "trigger_level_percent": 50},
+      {"threshold": 0.0037756040692329407, "trigger_level_percent": 75},
+      {"threshold": 0.0037756040692329407, "trigger_level_percent": 90}
+    ]
+  },
+  "calibration_selection_rule": "among adaptive candidates only, choose maximum AO subject to aggregate FPS no lower than 95% of disabled baseline; ties prefer lower pruning",
+  "selection_gate": {
+    "minimum_ao_delta": 0.003,
+    "minimum_relative_fps": -0.05,
+    "run_confirmation_only_if": "the one frozen calibration winner reaches both requirements on selection"
+  },
+  "b_test_policy": "Never run B_test unless calibration, selection, and confirmation all meet their registered gates."
+}
