@@ -26,3 +26,8 @@ A separate forced-rejection smoke (`cf_max_disagreement=0.0`) produced one
 checked frame, one rejection, and no additional stored template. This confirms
 the disagreement changes the write decision rather than the primary predicted
 box.
+
+The template pool is indexed exclusively by accepted writes. A regression
+check exercised twenty rejected frames followed by a later acceptance and
+verified a bounded five-slot template list and FARTrack-compatible
+`1 x 445 x 445` mask throughout.

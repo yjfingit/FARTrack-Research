@@ -39,6 +39,48 @@ class CounterfactualAgreementVerifier:
         return (old_box - recent_box).abs().mean(dim=-1)
 
 
+class AcceptedTemplatePool:
+    """A fixed-width FARTrack template pool indexed by accepted writes only."""
+
+    def __init__(self, anchor: torch.Tensor, num_template: int, template_tokens: int = 49):
+        self.anchor = anchor
+        self.num_template = num_template
+        self.template_tokens = template_tokens
+        self.anchor_mask = torch.ones(template_tokens, dtype=torch.bool, device=anchor.device)
+        self.dynamic: list[tuple[torch.Tensor, torch.Tensor]] = []
+
+    @property
+    def capacity(self) -> int:
+        # The anchor must remain available to both the tracker and verifier.
+        return self.num_template - 1
+
+    def accept(self, template: torch.Tensor, pruning_masks) -> None:
+        """Store one candidate and retain only the newest bounded dynamic views."""
+        token_mask = pruning_masks[0][0].to(device=template.device, dtype=torch.bool).clone()
+        if token_mask.numel() != self.template_tokens:
+            raise ValueError(f"expected {self.template_tokens} template-mask tokens, got {token_mask.numel()}")
+        self.dynamic.append((template, token_mask))
+        self.dynamic = self.dynamic[-self.capacity:]
+
+    def slots(self) -> list[tuple[torch.Tensor, torch.Tensor]]:
+        # Right-alignment matches FARTrack's early-frame anchor padding while
+        # keeping every dynamic slot tied to a successful write.
+        padding = self.num_template - len(self.dynamic)
+        return [(self.anchor, self.anchor_mask)] * padding + self.dynamic
+
+    def fartrack_inputs(self) -> tuple[list[torch.Tensor], torch.Tensor]:
+        slots = self.slots()
+        templates = [template for template, _ in slots]
+        key_mask = torch.ones(
+            (1, self.template_tokens * self.num_template + 200),
+            dtype=torch.bool, device=self.anchor.device)
+        for slot, (_, token_mask) in enumerate(slots):
+            start = slot * self.template_tokens
+            key_mask[:, start:start + self.template_tokens] = token_mask
+        # FARTrack's attention accepts a full query-by-key boolean mask.
+        return templates, key_mask.unsqueeze(-1).expand(-1, -1, key_mask.shape[-1]).permute(0, 2, 1)
+
+
 class FARTrackSparseCounterfactual(FARTrackSparse):
     """FARTrackSparse with a label-free counterfactual template-write gate."""
 
@@ -55,8 +97,16 @@ class FARTrackSparseCounterfactual(FARTrackSparse):
         # Slots start as copies of the anchor.  A counterfactual view is only
         # meaningful after independent accepted updates fill the pool.
         self.cf_accepted_writes = 0
+        self.cf_template_pool = AcceptedTemplatePool(self.z_dict1[0], self.num_template)
         self.cf_stats = {"checked": 0, "accepted": 0, "rejected": 0, "last_disagreement": None}
         return output
+
+    def _accept_template(self, template: torch.Tensor, pruning_masks) -> None:
+        """Update FARTrack inputs from accepted-write state, never frame index."""
+        self.cf_template_pool.accept(template, pruning_masks)
+        self.z_dict1, self.mask = self.cf_template_pool.fartrack_inputs()
+        self.cf_accepted_writes += 1
+        self.cf_stats["accepted"] += 1
 
     def _sequence_input(self, resize_factor: float) -> torch.Tensor:
         history = []
@@ -132,9 +182,7 @@ class FARTrackSparseCounterfactual(FARTrackSparse):
             template_patch, _, template_mask = sample_target(
                 image, self.state, self.params.template_factor, output_sz=self.params.template_size)
             new_template = self.preprocessor.process(template_patch, template_mask).tensors
-            self.template_update_sampling(new_template, "exponential", mask=main_out["mask"])
-            self.cf_accepted_writes += 1
-            self.cf_stats["accepted"] += 1
+            self._accept_template(new_template, main_out["mask"])
         elif disagreement is not None:
             self.cf_stats["rejected"] += 1
         self._update_history()
