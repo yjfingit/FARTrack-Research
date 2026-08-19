@@ -24,6 +24,20 @@ import importlib
 
 from ..utils.focal_loss import FocalLoss
 
+
+def _single_thread_data_worker(_worker_id):
+    """Avoid OpenCV/OpenMP oversubscription in image-decoding workers."""
+    try:
+        import cv2
+        cv2.setNumThreads(0)
+    except Exception:
+        pass
+    try:
+        import torch
+        torch.set_num_threads(1)
+    except Exception:
+        pass
+
 def names2datasets(name_list: list, settings, image_loader):
     assert isinstance(name_list, list)
     datasets = []
@@ -178,7 +192,8 @@ def run(settings):
             prob=cfg.DATA.INTERVAL_PROB)
         loader_train = SLTLoader('train', dataset_train, training=True, batch_size=cfg.TRAIN.BATCH_SIZE,
                                  num_workers=cfg.TRAIN.NUM_WORKER,
-                                 shuffle=False, drop_last=True)
+                                 shuffle=False, drop_last=True,
+                                 worker_init_fn=_single_thread_data_worker)
     # fartrack_distill
     elif settings.script_name == "fartrack_distill": # Perform distillation based on FARTrack.
         net = build_fartrack_distill(cfg)

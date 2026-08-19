@@ -14,6 +14,19 @@ import _init_paths
 import lib.train.admin.settings as ws_settings
 
 
+def _runtime_thread_limits():
+    """Honor explicit per-process limits while preserving legacy defaults."""
+    torch_threads = int(os.environ.get('FARTRACK_TORCH_THREADS', '4'))
+    opencv_threads = int(os.environ.get('FARTRACK_OPENCV_THREADS', '4'))
+    torch.set_num_threads(torch_threads)
+    cv.setNumThreads(opencv_threads)
+    try:
+        torch.set_num_interop_threads(int(os.environ.get('FARTRACK_TORCH_INTEROP_THREADS', '1')))
+    except RuntimeError:
+        # PyTorch permits this setting only before parallel work has started.
+        pass
+
+
 def init_seeds(seed):
     random.seed(seed)
     np.random.seed(seed)
@@ -21,8 +34,7 @@ def init_seeds(seed):
     torch.cuda.manual_seed(seed)
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
-    torch.set_num_threads(4)
-    cv.setNumThreads(1)
+    _runtime_thread_limits()
     cv.ocl.setUseOpenCL(False)
 
 
@@ -38,8 +50,7 @@ def run_training(script_name, config_name, cudnn_benchmark=True, local_rank=-1, 
     if save_dir is None:
         print("save_dir dir is not given. Use the default dir instead.")
     # This is needed to avoid strange crashes related to opencv
-    torch.set_num_threads(4)
-    cv.setNumThreads(4)
+    _runtime_thread_limits()
 
     torch.backends.cudnn.benchmark = cudnn_benchmark
 

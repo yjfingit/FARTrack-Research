@@ -49,3 +49,36 @@ testable contribution is a checkpoint-compatible way to activate a specific
 otherwise-discarded trajectory interface in frozen FARTrackSparse.  Any
 efficacy or novelty claim is deferred until a split-isolated trained experiment
 and literature comparison are complete.
+
+## Pre-registered matched training screen
+
+The first learning screen uses one epoch of 2,048 sampled examples, batch size
+four, hence exactly 512 optimizer steps per seed.  It compares three fixed
+seeds (`1008`, `2026`, `3407`) for each arm, for 3,072 total updates:
+
+| Arm | Config | CTQA flag | Checkpoint | Training data |
+| --- | --- | --- | --- | --- |
+| Continued-training control | `fartrack_sparse_224_continue_got10k_screen` | false | `FARTrackSparse_ep0015.pth.tar` | `GOT10K_train_full` only |
+| CTQA | `fartrack_sparse_224_ctqa_got10k_screen` | true | `FARTrackSparse_ep0015.pth.tar` | `GOT10K_train_full` only |
+
+All optimizer, sampling, augmentation, batch, worker, and seed settings are
+identical.  The paired-config test prevents drift outside the feature flag.
+The launcher requires explicit `CTQA_DATA_VERIFIED=1`, installs a temporary
+train-only local environment, restores it on exit, and limits the parent and
+four DataLoader processes to one internal CPU thread each.
+
+```bash
+cd /tmp/arbor-worktrees-0/coordinator__n18-mechanism-causal-trajectory-quer-438901eb
+for seed in 1008 2026 3407; do
+  CTQA_DATA_VERIFIED=1 bash scripts/launch_ctqa_screen.sh control "$seed"
+  CTQA_DATA_VERIFIED=1 bash scripts/launch_ctqa_screen.sh ctqa "$seed"
+done
+```
+
+Expected artifacts for arm `A` and seed `S` are:
+
+```text
+/root/autodl-tmp/experiment/.research-assets/runs/ctqa_screen/A/seed_S/stdout.log
+/root/autodl-tmp/experiment/.research-assets/runs/ctqa_screen/A/seed_S/logs/fartrack_sparse-<config>.log
+/root/autodl-tmp/experiment/.research-assets/runs/ctqa_screen/A/seed_S/checkpoints/train/fartrack_sparse/<config>/FARTrackSparse_ep0001.pth.tar
+```
