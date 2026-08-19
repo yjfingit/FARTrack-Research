@@ -116,6 +116,14 @@ projection. Their broad motivation overlaps uncertainty-aware tracking
 literature \cite{zhou2021uncertainty,zhang2022uast,yao2025unctrack}; this study
 does not claim conceptual novelty for uncertainty gating.
 
+Finally, we audited token-level rather than template-level control. The native
+FARTrack masks retain 37, 25, 13, or 5 of 49 template tokens. Even a rare,
+disagreement-triggered stronger mask reduced calibration AO by 0.00901. An
+independent bidirectional sparse optical-flow arbitration was also rejected on
+two fixed screens: it reduced AO where it changed boxes and cost 27.94\% FPS on
+the triggered sequence. Optical-flow tracking is established prior art
+\cite{lucas1981iterative}; it is reported only as a feasibility ablation.
+
 \section{Results}
 \begin{table}[h]
 \centering
@@ -171,6 +179,8 @@ Delayed search & -0.003339 & +18.3\% & selection \\
 Two-view arbitration & -0.000046 & -11.6\% & calibration \\
 Recent-window read & -0.000685 & +10.8\% & calibration \\
 Posterior projection & -0.009987 & -- & calibration \\
+Token quarantine & -0.009010 & -1.1\% & calibration \\
+Sparse-flow arbitration & -0.002827 & -27.9\% & screen \\
 \bottomrule
 \end{tabular}}
 \end{table}
