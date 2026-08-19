@@ -20,6 +20,33 @@
 | `sar_far` | 0.797473 | -0.032038 | [-0.050311, -0.015034] | 40.90 | rejected |
 | logarithmic sampler | 0.830650 | -0.002730 | [-0.010716, 0.003984] | 31.32 | rejected |
 
+## Split-Controlled Reliability and Decision Studies
+
+After the complete-development results above were frozen, a separate
+calibration/selection/confirmation partition of GOT-10k validation was used
+for diagnostics and narrowly pre-registered interventions. These runs are not
+comparable to the full-development table and none reached its selection gate or
+accessed B_test.
+
+| Node | Mechanism | Development evidence | Decision |
+| --- | --- | --- | --- |
+| 7 | Passive localization reliability probe | Coordinate entropy: low-IoU AUROC 0.906718; branch disagreement AUROC 0.806355; outputs byte-identical on 180/180 sequences | diagnostic only |
+| 8 | Entropy-conditioned dual-lane memory | selection AO -0.003999; FPS -15.6% | rejected |
+| 9 | Entropy-conditioned state mixing | selection AO +0.000644, 95% CI [-0.019301, 0.020574]; FPS -58.6% | rejected |
+| 10 | Branch-disagreement state mixing | selection AO -0.001688, 95% CI [-0.023716, 0.017422] | rejected |
+| 11 | Delayed search expansion | selection AO -0.003339 | rejected |
+| 12 | Rare two-view arbitration | calibration AO -0.000046 at 1.20x; FPS -11.64% | rejected before selection |
+| 13 | Entropy-age conditional recent read | calibration AO -0.000685; FPS +10.77% | rejected before selection |
+| 14 | Posterior-shape adaptive projection | best gated calibration AO 0.837691 versus 0.847678 baseline | rejected before selection |
+
+Node 7 established that the frozen coordinate posterior is strongly predictive
+of failure but did not improve any box and did not alter the base tracker.
+Nodes 8--14 test distinct actions rather than treating this predictive
+association as causal evidence. Their reports, exact frozen split definitions,
+commands, and raw-result paths are in `.arbor/sessions/rgb_tracking_training_free_20260819/experiments/7`
+through `14` in the coordinator worktree. Raw outputs remain on the data disk
+under `/root/autodl-tmp/experiment/.research-assets/output/`.
+
 The bootstrap resamples the 180 per-sequence AO deltas with seed `20260819`
 for 10,000 draws.  No rejected method was run on B_test or tuned after its
 full B_dev result.

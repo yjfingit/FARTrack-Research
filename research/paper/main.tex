@@ -21,7 +21,7 @@ Visual object tracking, template memory, autoregressive tracking, negative resul
 \begin{abstract}
 Template updates make visual trackers adapt to changing appearance, but can also
 propagate a localization error.  We conduct a controlled, training-free study
-of six inference-time candidate directions for a frozen FARTrackSparse checkpoint.  The
+of fourteen inference-time candidate directions for a frozen FARTrackSparse checkpoint.  The
 development protocol uses the public GOT-10k validation set (180 sequences,
 21,007 frames), while full LaSOT Testing is held out until configuration
 freezing.  Four complete development evaluations show that hard write holding,
@@ -29,7 +29,10 @@ counterfactual write rejection, stable-anchor recovery, and a logarithmic templa
 sampler reduce mean frame IoU by 0.00823, 0.02000, 0.03204, and 0.00273,
 respectively, relative to the immutable
 baseline.  Two soft rebinding variants fail fixed-screen directionality or
-efficiency gates.  Thus no proposed intervention is claimed as an improvement.
+efficiency gates. A second split-controlled phase finds that coordinate entropy
+is a strong failure diagnostic (AUROC 0.9067), yet seven distinct reliability-
+conditioned actions also fail their calibration or selection gates. Thus no
+proposed intervention is claimed as an improvement.
 The contribution of this draft is a transparent negative-result record,
 including checked implementation failures, statistical uncertainty, and a
 reproducible protocol. The frozen baseline-only LaSOT reference gives a local
@@ -101,6 +104,18 @@ an out-of-range indexing defect after a rejected write; it was repaired by
 indexing its bounded template pool by accepted writes, and only the repaired
 version was evaluated.
 
+\noindent\textbf{Reliability follow-up.} A passive probe measured coordinate-bin
+entropy, branch disagreement, and IoU without affecting outputs. Entropy
+identified frames with IoU below 0.2 with AUROC 0.9067, but a signal that
+predicts failure need not prescribe its repair. We therefore pre-registered a
+calibration/selection/confirmation partition by sequence identifier. The
+following actions were stopped before B\textsubscript{test}: dual-lane memory,
+causal state mixing, delayed search expansion, rare two-view arbitration,
+entropy-age recent-window reading, and posterior-shape adaptive point
+projection. Their broad motivation overlaps uncertainty-aware tracking
+literature \cite{zhou2021uncertainty,zhang2022uast,yao2025unctrack}; this study
+does not claim conceptual novelty for uncertainty gating.
+
 \section{Results}
 \begin{table}[h]
 \centering
@@ -140,6 +155,25 @@ on a fixed 60-frame screen. Appearance-diverse rebinding obtained a small
 loss (21.93 versus 26.28 FPS), exceeding the 5\% gate. These are screening
 observations, not generalization estimates, and were not expanded to a full
 development evaluation.
+
+\begin{table}[h]
+\centering
+\caption{Split-controlled reliability follow-up. Baseline calibration AO is
+0.847678. All candidates were rejected before held-out testing.}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lrrl}
+\toprule
+Action & \(\Delta\) AO & FPS change & Stop point \\
+\midrule
+Dual-lane memory & -0.003999 & -15.6\% & selection \\
+State mixing & +0.000644 & -58.6\% & selection \\
+Delayed search & -0.003339 & +18.3\% & selection \\
+Two-view arbitration & -0.000046 & -11.6\% & calibration \\
+Recent-window read & -0.000685 & +10.8\% & calibration \\
+Posterior projection & -0.009987 & -- & calibration \\
+\bottomrule
+\end{tabular}}
+\end{table}
 
 \section{Discussion and Limitations}
 The shared pattern is that hard intervention can sacrifice normal appearance
