@@ -18,6 +18,7 @@
 | `trm_far` | 0.822471 | -0.008228 | [-0.019499, 0.004104] | 42.16 | rejected |
 | `fartrack_sparse_cf` | 0.806470 | -0.019995 | [-0.037073, -0.003256] | 23.47 | rejected |
 | `sar_far` | 0.797473 | -0.032038 | [-0.050311, -0.015034] | 40.90 | rejected |
+| logarithmic sampler | 0.830650 | -0.002730 | [-0.010716, 0.003984] | 31.32 | rejected |
 
 The bootstrap resamples the 180 per-sequence AO deltas with seed `20260819`
 for 10,000 draws.  No rejected method was run on B_test or tuned after its
@@ -45,8 +46,17 @@ single-process command above before B_test.
 
 ## Interpretation
 
-Three hard interventions (write holding, rollback/replay, and hard
-counterfactual rejection) all reduced AO.  The next hypotheses preserve the
-baseline's per-frame template-write cadence and one-forward inference budget;
-they only rebind the existing fixed template slots.  This is a constraint from
-measured evidence, not a claimed improvement.
+Three hard interventions, a soft rebinding screen, and a zero-extra-forward
+logarithmic temporal sampler all failed their complete-development or prespecified
+screen gates.  No candidate is claimed to improve the frozen baseline.
+
+## Held-Out Baseline Reference
+
+After candidate selection was frozen, the immutable baseline was run once on
+the verified official LaSOT Testing archive (Protocol-II, 280 sequences). The
+separate local, read-only summary returned success AUC `0.6147875189781189`,
+precision at 20 pixels `0.6446002125740051`, and normalized precision AUC
+`0.6399275660514832`. Results are in
+`/root/autodl-tmp/experiment/.research-assets/output/lasot_btest_baseline_metrics.json`.
+This is an external baseline reference, not a new-method result. No rejected
+candidate was run on LaSOT.

@@ -31,8 +31,9 @@ baseline.  Two soft rebinding variants fail fixed-screen directionality or
 efficiency gates.  Thus no proposed intervention is claimed as an improvement.
 The contribution of this draft is a transparent negative-result record,
 including checked implementation failures, statistical uncertainty, and a
-reproducible protocol.  The held-out baseline-only LaSOT run is in progress at
-the time of this draft and its result is intentionally not reported here.
+reproducible protocol. The frozen baseline-only LaSOT reference gives a local
+success AUC of 0.6148 on 280 Protocol-II sequences; no rejected candidate was
+run on that held-out set.
 \end{abstract}
 
 \section{Introduction}
@@ -64,7 +65,10 @@ and prediction lengths. Full official LaSOT Testing is B\textsubscript{test}.
 LaSOT supplies dense, long sequences for SOT evaluation \cite{fan2019lasot}.
 It was checksum-verified and not accessed until all candidate decisions were
 frozen. The B\textsubscript{test} run is baseline-only because no candidate
-survived B\textsubscript{dev}.
+survived B\textsubscript{dev}. It measured success AUC 0.6148, precision at
+20 pixels 0.6446, and normalized precision AUC 0.6399. This is an external
+baseline reference, not a new-method result; no cross-run comparison to
+upstream repository tables is claimed.
 
 \noindent\textbf{Statistics and speed.} We report the mean of per-frame IoUs. For a
 candidate-baseline comparison, we resample the 180 per-sequence AO differences
@@ -106,6 +110,7 @@ Immutable FARTrackSparse & 0.832741 & 0.000000 & -- & 40.07 \\
 TRM-FAR & 0.822471 & -0.008228 & [-0.019499, 0.004104] & 42.16 \\
 Counterfactual agreement & 0.806470 & -0.019995 & [-0.037073, -0.003256] & 23.47 \\
 Stable-anchor recovery & 0.797473 & -0.032038 & [-0.050311, -0.015034] & 40.90 \\
+Logarithmic sampler & 0.830650 & -0.002730 & [-0.010716, 0.003984] & 31.32 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -142,8 +147,9 @@ fixed settings on the stated protocol.
 
 Limitations are substantial. There is one released checkpoint, one full public
 development split, RGB descriptors rather than learned confidence, and no
-positive method. The LaSOT test score is pending and must not be inferred from
-GOT-10k validation. GOT-10k test server submission has not been performed.
+positive method. The LaSOT outcome is a baseline-only reference; it cannot
+validate a rejected candidate. GOT-10k test server submission has not been
+performed.
 
 \section{Reproducibility and Disclosure}
 All source changes, commands, structured metrics, logs, and immutable checkpoint
