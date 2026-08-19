@@ -1,0 +1,24 @@
+{
+  "candidate": "fartrack_sparse_cspp",
+  "created_before_selection": true,
+  "data_partition": {
+    "calibration": "GOT-10k validation numeric sequence ID modulo 3 equals 1; passive, ground-truth audit only",
+    "selection": "GOT-10k validation numeric sequence ID modulo 3 equals 2",
+    "confirmation": "GOT-10k validation numeric sequence ID modulo 3 equals 0"
+  },
+  "frozen_policy": {
+    "signal": "abs(cx_mode - cx_mean) / width_midpoint from the native raw [left, top, right, bottom] coordinates",
+    "threshold": 0.025943091585107998,
+    "threshold_source": "calibration-only q95 from node14 passive raw-branch same-state audit",
+    "comparison": "inclusive >=",
+    "action": "when gated, replace only midpoint horizontal center with posterior-expectation horizontal center by applying the same offset to left and right corners",
+    "preserved": ["midpoint vertical center", "midpoint width", "midpoint height", "state history", "template read/write", "search crop", "one frozen forward per frame"],
+    "host_sync": "none beyond released final box conversion"
+  },
+  "selection_gate": {
+    "minimum_ao_delta": 0.003,
+    "maximum_relative_fps_loss": 0.05,
+    "proceed_to_confirmation_only_if": "both requirements are satisfied on selection"
+  },
+  "b_test_policy": "Never run B_test unless the frozen policy passes selection and confirmation."
+}
