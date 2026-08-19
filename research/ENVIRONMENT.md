@@ -33,6 +33,10 @@ training, data, tracker, or evaluation protocol.
 
 The pending GOT-10k training mirror is downloaded under
 `/root/autodl-tmp/experiment/.research-assets/datasets/got10k-train-mirror`.
+It is a public Hugging Face mirror (`jinyoungkim/GoT-10k`) containing only the
+two uploaded archive parts and no dataset-card metadata; it is not represented
+as an official GOT-10k distribution. Its use is conditional on the recorded
+part hashes, archive integrity check, and a subsequent training-root inspection.
 Before extraction, validate both supplied split-file digests and the joined ZIP
 directory with:
 
