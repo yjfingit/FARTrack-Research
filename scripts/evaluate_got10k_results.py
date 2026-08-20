@@ -29,7 +29,17 @@ def main() -> None:
     parser.add_argument("--output", required=True, type=Path)
     args = parser.parse_args()
 
-    names = (args.data_root / "list.txt").read_text().splitlines()
+    list_path = args.data_root / "list.txt"
+    # Official GOT-10k releases occur both with a list.txt manifest and as a
+    # val/ directory containing sequence folders.  In the latter layout the
+    # directory names are the immutable public sequence manifest.
+    names = (
+        list_path.read_text().splitlines()
+        if list_path.is_file()
+        else sorted(path.name for path in args.data_root.iterdir() if (path / "groundtruth.txt").is_file())
+    )
+    if not names:
+        raise ValueError(f"no GOT-10k sequences found under {args.data_root}")
     per_sequence_ao: dict[str, float] = {}
     all_overlaps: list[np.ndarray] = []
     all_times: list[np.ndarray] = []
