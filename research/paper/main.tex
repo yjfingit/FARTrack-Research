@@ -233,6 +233,24 @@ results. Left: per-sequence AO deltas. Right: the share of total negative
 per-sequence delta contributed by each method's five largest losses.}
 \end{figure}
 
+\noindent\textbf{Deterministic qualitative cases.} Figure~4 is a visual
+supplement, not a semantic explanation. For each complete candidate, we fixed
+the lowest-sequence-AO case from the loss atlas and then selected the frame
+that minimizes candidate-minus-baseline IoU. At each selected frame the
+candidate box has much lower overlap than the immutable baseline. The panels
+make the geometric outcome inspectable, but cannot identify why the action
+failed or show that the displayed frame is representative.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../../results/1.2-complete-bdev-failure-cases/failure_cases.png}
+\caption{Fixed-rule complete B\textsubscript{dev} failure cases. Within a
+pre-named lowest-AO sequence per method, the panel is the frame with minimum
+candidate-minus-baseline IoU. Green: GT; blue: immutable baseline; red:
+candidate. These overlays are qualitative supplements and do not support a
+semantic cause attribution.}
+\end{figure}
+
 The two soft alternatives did not pass their prespecified focused-screen gates.
 Recent-consensus rebinding obtained 0.907830 versus 0.909803 for the baseline
 on a fixed 60-frame screen. Appearance-diverse rebinding obtained a small
