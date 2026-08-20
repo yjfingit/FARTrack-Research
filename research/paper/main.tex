@@ -215,6 +215,24 @@ TRM-FAR improved 70 sequences and degraded 110; stable-anchor recovery improved
 No candidate in Table~1 was tuned after its complete development result or run
 on B\textsubscript{test}.
 
+\noindent\textbf{Effect distributions.} A read-only distribution audit of the
+same 180 per-sequence AO values shows mixed outcomes rather than uniform
+degradation. Nevertheless, TRM-FAR, counterfactual agreement, and stable-anchor
+recovery have negative medians (-0.00393, -0.00466, and -0.00726); their five
+largest per-sequence losses account for 33.76\%, 35.26\%, and 33.54\% of total
+negative delta. The logarithmic sampler has a near-zero median (-0.00053), but
+its five largest losses account for 55.89\%. Thus the aggregate failures cannot
+be summarized as a single shared catastrophic case, and positive outcomes on
+some sequences do not establish a fixed deployment rule.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../../results/1.1-complete-bdev-loss-atlas/loss_atlas.png}
+\caption{Read-only distribution audit of the complete B\textsubscript{dev}
+results. Left: per-sequence AO deltas. Right: the share of total negative
+per-sequence delta contributed by each method's five largest losses.}
+\end{figure}
+
 The two soft alternatives did not pass their prespecified focused-screen gates.
 Recent-consensus rebinding obtained 0.907830 versus 0.909803 for the baseline
 on a fixed 60-frame screen. Appearance-diverse rebinding obtained a small

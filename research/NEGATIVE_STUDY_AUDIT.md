@@ -53,6 +53,7 @@ generalization estimate.
 | 16 | Forward-backward sparse-flow arbitration | Independent algorithm, but same RGB frames | Focused two-sequence screen | changed screen delta -0.002827; -27.94% FPS | Feasibility gate failed; not a full result |
 | 17 | Horizontal-only posterior expectation correction | Existing coordinate branches | Held selection | delta -0.001162; +17.12% FPS | Rejected before confirmation; valid selection JSON retained |
 | 17.1 | Read-only CSPP conditional action-advantage audit | Node 7 passive risk logs plus retained Node 17 predictions | Held selection, descriptive | entropy-q85 +0.009409 and disagreement-q85 +0.008231 frame-IoU deltas, but both sequence-bootstrap CIs cross zero; changed-frame delta -0.002076 | No tuning or new run; supports bounded risk/action distinction |
+| 1.1 | Read-only complete-B_dev loss atlas | Retained baseline and Nodes 1/2/3/6 per-sequence AO JSONs | Complete B_dev, descriptive | all four have mixed sequence effects; three memory controls have negative medians; logarithmic top-five loss share 55.89% | No new method; documents failure heterogeneity |
 | 18 | CTQA learned trajectory adapter | Would require training data and optimizer | Not evaluated | no efficacy result | Excluded by scope |
 
 `node8`, `node9`, `node10`, `node11`, and `node16` do not currently retain
@@ -101,6 +102,15 @@ frames). High-risk strata have positive mean deltas (+0.009409 for entropy and
 box actually changed have mean delta -0.002076 with interval [-0.025566,
 0.020478]. This descriptive, post-hoc analysis does not establish a deployable
 positive action advantage and cannot be used to retune CSPP.
+
+Node 1.1 separately audits all 180 per-sequence AO deltas for the four complete
+B_dev candidates. It finds mixed sequence effects rather than uniform decline:
+TRM, counterfactual agreement, and stable-anchor recovery have medians
+-0.003931, -0.004659, and -0.007263, while their largest five losses account
+for 33.76%, 35.26%, and 33.54% of total negative delta. Logarithmic sampling has
+a near-zero median (-0.000534) but 55.89% of total loss in its five worst
+sequences. This supports a heterogeneous-failure interpretation, not an
+unsupported semantic attribution to any one sequence.
 
 The following is **not** supported: a universal impossibility theorem, a claim
 that the baseline is Bayes-optimal, a comparison of calibration/focused results
