@@ -1,0 +1,5 @@
+method,sequence,selection_rule,frame_index_zero_based,frame_file,baseline_iou,candidate_iou,delta_iou
+TRM-FAR,GOT-10k_Val_000042,argmin_frame(candidate_iou - baseline_iou),73,00000074.jpg,0.9505256648113791,0.0,-0.9505256648113791
+Counterfactual,GOT-10k_Val_000108,argmin_frame(candidate_iou - baseline_iou),161,00000162.jpg,0.987012987012987,0.02779875463698993,-0.9592142323759971
+Stable-anchor,GOT-10k_Val_000108,argmin_frame(candidate_iou - baseline_iou),161,00000162.jpg,0.987012987012987,0.027965666837710502,-0.9590473201752765
+Logarithmic,GOT-10k_Val_000071,argmin_frame(candidate_iou - baseline_iou),49,00000050.jpg,0.9425725789362153,0.0,-0.9425725789362153
