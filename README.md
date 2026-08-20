@@ -1,5 +1,23 @@
 # ICLR2026 | FARTrack
 
+> **Research extension for ICASSP 2027.** This repository also hosts an
+> ongoing, fully reproducible study of training-free RGB single-object
+> tracking. The study asks whether a frozen tracker's internal risk signal can
+> justify a low-cost recovery action across five tracker families. It keeps
+> public GOT-10k development data, hidden test data, upstream source caches,
+> and pre-registered decisions strictly separated. Results are reported only
+> after the corresponding real experiment has completed; ongoing candidates
+> are not paper claims. See
+> [`research/cross_model/`](research/cross_model/) for the protocol, model
+> registry, evidence ledger, commands, and ICASSP 2027 paper package.
+
+**Target venue:** IEEE International Conference on Acoustics, Speech, and
+Signal Processing (ICASSP 2027).
+
+**Research question:** risk prediction is not enough. We test the stronger,
+causal requirement that an action selected by that risk signal improves
+tracking under a frozen-model, no-training protocol.
+
 The official PyTorch implementation of our **ICLR 2026**  paper:
 
 **FARTrack: Fast Autoregressive Visual Tracking with High Performance**
@@ -178,4 +196,3 @@ If any parts of our paper and code help your research, please consider citing us
 ## Contact
 
 If you have any questions or concerns, feel free to open issues.
-
