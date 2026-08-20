@@ -1,0 +1,60 @@
+diff --git a/lib/test/parameter/ostrack_risk.py b/lib/test/parameter/ostrack_risk.py
+new file mode 100644
+index 0000000..cd2cd78
+--- /dev/null
++++ b/lib/test/parameter/ostrack_risk.py
+@@ -0,0 +1,9 @@
++import os
++
++from lib.test.parameter.ostrack import parameters as base_parameters
++
++
++def parameters(yaml_name: str):
++    params = base_parameters(yaml_name)
++    params.risk_log_path = os.environ['OSTRACK_RISK_LOG_PATH']
++    return params
+diff --git a/lib/test/tracker/ostrack.py b/lib/test/tracker/ostrack.py
+index 3674779..6be2b9e 100644
+--- a/lib/test/tracker/ostrack.py
++++ b/lib/test/tracker/ostrack.py
+@@ -10,6 +10,7 @@ from lib.train.data.processing_utils import sample_target
+ # for debug
+ import cv2
+ import os
++import json
+ 
+ from lib.test.tracker.data_utils import Preprocessor
+ from lib.utils.box_ops import clip_box
+@@ -87,6 +88,21 @@ class OSTrack(BaseTracker):
+         # add hann windows
+         pred_score_map = out_dict['score_map']
+         response = self.output_window * pred_score_map
++        if getattr(self.params, 'risk_log_path', None):
++            # Logging is opt-in and occurs strictly after the unchanged response
++            # calculation.  It cannot affect the following box decision.
++            flat = response.detach().reshape(-1)
++            probabilities = torch.softmax(flat, dim=0)
++            entropy = -(probabilities * probabilities.clamp_min(1e-12).log()).sum()
++            top2 = torch.topk(flat, k=2).values
++            record = {
++                'frame': self.frame_id,
++                'response_entropy': float(entropy.cpu()),
++                'response_peak': float(top2[0].cpu()),
++                'response_margin': float((top2[0] - top2[1]).cpu()),
++            }
++            with open(self.params.risk_log_path, 'a', encoding='utf-8') as handle:
++                handle.write(json.dumps(record, sort_keys=True) + '\n')
+         pred_boxes = self.network.box_head.cal_bbox(response, out_dict['size_map'], out_dict['offset_map'])
+         pred_boxes = pred_boxes.view(-1, 4)
+         # Baseline: Take the mean of all pred boxes as the final result
+diff --git a/lib/test/tracker/ostrack_risk.py b/lib/test/tracker/ostrack_risk.py
+new file mode 100644
+index 0000000..1bd742d
+--- /dev/null
++++ b/lib/test/tracker/ostrack_risk.py
+@@ -0,0 +1,5 @@
++from lib.test.tracker.ostrack import OSTrack
++
++
++def get_tracker_class():
++    return OSTrack
