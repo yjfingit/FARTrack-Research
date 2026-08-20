@@ -1,0 +1,71 @@
+{
+  "models": [
+    {
+      "model_id": "siamrpnpp",
+      "cache": "PySOT",
+      "official_remote": "https://github.com/STVIR/pysot.git",
+      "family": "classic Siamese correlation",
+      "checkpoint_source": "PySOT MODEL_ZOO.md official Google Drive link",
+      "inference_hint": "tools/test.py with siamrpn_r50_l234_dwxcorr config",
+      "repo": "/root/autodl-tmp/experiment/external-trackers/PySOT",
+      "head": "d04028f8e18c6b27ee150a7c0d8aab9a1807219e",
+      "remote": "https://github.com/STVIR/pysot.git",
+      "remote_matches_expected": true,
+      "license_file": "/root/autodl-tmp/experiment/external-trackers/PySOT/LICENSE",
+      "checkpoint_present": false,
+      "eligibility": "eligible_for_checkpoint_fetch"
+    },
+    {
+      "model_id": "ostrack",
+      "cache": "OSTrack",
+      "official_remote": "https://github.com/botaoye/OSTrack.git",
+      "family": "one-stream Transformer",
+      "checkpoint_source": "official OSTrack README Google Drive model folder",
+      "inference_hint": "tracking/test.py ostrack <config> --dataset got10k_val",
+      "repo": "/root/autodl-tmp/experiment/external-trackers/OSTrack",
+      "head": "33b5e12586216b7fd0e95d255bd01ba44cbec759",
+      "remote": "https://github.com/botaoye/OSTrack.git",
+      "remote_matches_expected": true,
+      "license_file": "/root/autodl-tmp/experiment/external-trackers/OSTrack/LICENSE",
+      "checkpoint_present": false,
+      "eligibility": "eligible_for_checkpoint_fetch"
+    },
+    {
+      "model_id": "mixformer",
+      "cache": "MixFormerV2",
+      "official_remote": "https://github.com/mcg-nju/MixFormerV2.git",
+      "family": "mixed-attention online templates",
+      "checkpoint_source": "official MixFormerV2 README Google Drive or NJU Box",
+      "inference_hint": "official tracking/test_mixformer.sh-compatible entry point",
+      "repo": "/root/autodl-tmp/experiment/external-trackers/MixFormerV2",
+      "head": "10414383d20de5587b74ffcc07f4b5cc2bec2449",
+      "remote": "https://github.com/mcg-nju/MixFormerV2.git",
+      "remote_matches_expected": true,
+      "license_file": "/root/autodl-tmp/experiment/external-trackers/MixFormerV2/LICENSE",
+      "checkpoint_present": false,
+      "eligibility": "eligible_for_checkpoint_fetch"
+    },
+    {
+      "model_id": "odtrack",
+      "cache": "ODTrack",
+      "official_remote": "https://github.com/GXNU-ZhongLab/ODTrack.git",
+      "family": "online dense temporal tokens",
+      "checkpoint_source": "official ODTrack README Google Drive model folder",
+      "inference_hint": "tracking/test.py odtrack <config> --dataset got10k_val",
+      "repo": "/root/autodl-tmp/experiment/external-trackers/ODTrack",
+      "head": "88c0a8e4b50faa8fe4e087f1f4b634dc78b6911d",
+      "remote": "https://github.com/GXNU-ZhongLab/ODTrack.git",
+      "remote_matches_expected": true,
+      "license_file": "/root/autodl-tmp/experiment/external-trackers/ODTrack/LICENSE",
+      "checkpoint_present": false,
+      "eligibility": "eligible_for_checkpoint_fetch"
+    }
+  ],
+  "visible_checkpoints": [
+    {
+      "path": "/root/autodl-tmp/experiment/.research-assets/checkpoints/FARTrackSparse_ep0015.pth.tar",
+      "bytes": 84454001,
+      "sha256": "923f86afeff2925d84e12b16283b8ffbff3299c48f1019f129aa306382ab5477"
+    }
+  ]
+}
