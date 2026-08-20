@@ -52,6 +52,7 @@ generalization estimate.
 | 15 | Disagreement-conditioned token pruning | Existing attention masks and branch disagreement | Calibration | best delta -0.009010; about -1.1% FPS | Calibration gate failed; summaries retained |
 | 16 | Forward-backward sparse-flow arbitration | Independent algorithm, but same RGB frames | Focused two-sequence screen | changed screen delta -0.002827; -27.94% FPS | Feasibility gate failed; not a full result |
 | 17 | Horizontal-only posterior expectation correction | Existing coordinate branches | Held selection | delta -0.001162; +17.12% FPS | Rejected before confirmation; valid selection JSON retained |
+| 17.1 | Read-only CSPP conditional action-advantage audit | Node 7 passive risk logs plus retained Node 17 predictions | Held selection, descriptive | entropy-q85 +0.009409 and disagreement-q85 +0.008231 frame-IoU deltas, but both sequence-bootstrap CIs cross zero; changed-frame delta -0.002076 | No tuning or new run; supports bounded risk/action distinction |
 | 18 | CTQA learned trajectory adapter | Would require training data and optimizer | Not evaluated | no efficacy result | Excluded by scope |
 
 `node8`, `node9`, `node10`, `node11`, and `node16` do not currently retain
@@ -89,6 +90,17 @@ For this checkpoint and protocol, the following is supported:
 3. Altering coordinate decoding, template read/write behavior, attention-mask
    pruning, local search, or a sparse-flow correction did not provide a verified
    deployment benefit under their stated tiers.
+
+Node 17.1 makes the key diagnostic distinction explicit using only retained
+outputs. It estimates q85 entropy and branch-disagreement thresholds on the 60
+calibration sequences, then aligns Node 7 byte-parity baseline files and the
+valid CSPP selection run over 60 held selection sequences (7,955 non-initial
+frames). High-risk strata have positive mean deltas (+0.009409 for entropy and
++0.008231 for disagreement), but their sequence-bootstrap 95% intervals are
+[-0.017325, 0.040717] and [-0.016408, 0.033060]. The 4,487 frames whose CSPP
+box actually changed have mean delta -0.002076 with interval [-0.025566,
+0.020478]. This descriptive, post-hoc analysis does not establish a deployable
+positive action advantage and cannot be used to retune CSPP.
 
 The following is **not** supported: a universal impossibility theorem, a claim
 that the baseline is Bayes-optimal, a comparison of calibration/focused results

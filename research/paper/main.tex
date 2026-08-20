@@ -1,13 +1,16 @@
-% ICASSP 2027 draft. The official 2027 author kit was not linked from the
-% conference site on 2026-08-19; this uses the official ICASSP 2026 spconf
-% layout and must be checked against the 2027 kit before submission.
+% ICASSP 2027 working draft. The official 2027 CFP specifies four technical
+% pages plus an optional reference-only fifth page. This repository currently
+% uses spconf as a layout proxy; it must be replaced by the official 2027 kit
+% and human-verified before submission.
 \documentclass{article}
 \usepackage{spconf}
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{hyperref}
-\title{When Cautious Template Memory Hurts: A Reproducible\
-Training-Free Study of Frozen FARTrackSparse}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\title{When Confidence Is Not Correction: A Controlled Negative Study of\
+Training-Free Post-hoc Adaptation for RGB Single-Object Tracking}
 \name{Anonymous Authors}
 \address{Anonymous Affiliation}
 
@@ -19,25 +22,23 @@ Visual object tracking, template memory, autoregressive tracking, negative resul
 \end{keywords}
 
 \begin{abstract}
-Template updates make visual trackers adapt to changing appearance, but can also
-propagate a localization error.  We conduct a controlled, training-free study
-of fourteen inference-time candidate directions for a frozen FARTrackSparse checkpoint.  The
-development protocol uses the public GOT-10k validation set (180 sequences,
-21,007 frames), while full LaSOT Testing is held out until configuration
-freezing.  Four complete development evaluations show that hard write holding,
-counterfactual write rejection, stable-anchor recovery, and a logarithmic template
-sampler reduce mean frame IoU by 0.00823, 0.02000, 0.03204, and 0.00273,
-respectively, relative to the immutable
-baseline.  Two soft rebinding variants fail fixed-screen directionality or
-efficiency gates. A second split-controlled phase finds that coordinate entropy
-is a strong failure diagnostic (AUROC 0.9067), yet seven distinct reliability-
-conditioned actions also fail their calibration or selection gates. Thus no
-proposed intervention is claimed as an improvement.
-The contribution of this draft is a transparent negative-result record,
-including checked implementation failures, statistical uncertainty, and a
-reproducible protocol. The frozen baseline-only LaSOT reference gives a local
-success AUC of 0.6148 on 280 Protocol-II sequences; no rejected candidate was
-run on that held-out set.
+Training-free interventions commonly use confidence to decide whether to alter
+a tracker\'s template memory, state, search region, or decoded box. We study a
+narrow question: for a released frozen FARTrackSparse checkpoint, does a
+failure-predictive signal provide enough information to choose a better
+post-hoc action? The development protocol uses public GOT-10k validation (180
+sequences, 21,007 frames), while LaSOT Testing remains held out. Four complete
+development evaluations show AO changes of -0.00823, -0.02000, -0.03204, and
+-0.00273 for transactional memory, counterfactual template gating,
+stable-anchor recovery, and logarithmic sampling. A passive coordinate-entropy
+probe predicts low-IoU frames (AUROC 0.9067), but split-controlled memory,
+motion, search, posterior, token, and flow actions fail their pre-specified
+effect or efficiency gates. We formalize the gap between predicting failure and
+predicting a positive conditional action advantage, and report the negative
+evidence with its evaluation tier, uncertainty, and artifact-retention limits.
+We make no claim that post-hoc adaptation is universally ineffective. A
+baseline-only LaSOT reference gives success AUC 0.6148 on 280 Protocol-II
+sequences; no rejected candidate was run on that held-out set.
 \end{abstract}
 
 \section{Introduction}
@@ -48,10 +49,46 @@ uses autoregression and inter-frame sparsification to obtain fast tracking
 untrained control of its inference-time template memory improve a released,
 frozen FARTrackSparse checkpoint without additional training?
 
-This paper reports the answer for the mechanisms tested: no.  We regard this
-as useful evidence because plausible memory protections can silently damage the
-update distribution expected by a frozen tracker.  We do not replace this
-negative result with a post-hoc positive claim.
+This paper reports a bounded answer: the tested mechanisms did not meet their
+pre-specified deployment criteria. We regard this as useful evidence because a
+plausible protection can silently disrupt the update distribution expected by a
+frozen tracker. We do not replace this negative result with a post-hoc positive
+claim, and do not claim that FARTrackSparse is optimal or that other trackers
+cannot benefit from adaptation.
+
+\section{From Risk to Action Advantage}
+Let \(Z_t\) contain the information already available to the frozen tracker at
+frame \(t\): the current crop, template memory, logits, decoded box, and causal
+box history. Let \(a_0(Z_t)\) be the released action and \(a_g(Z_t)\) a
+training-free intervention. The quantity needed for a beneficial intervention
+is its conditional action advantage
+\begin{equation}
+A_g(Z_t)=\mathbb{E}[\operatorname{IoU}(a_g(Z_t),B_t^*)-
+\operatorname{IoU}(a_0(Z_t),B_t^*)\mid Z_t].
+\end{equation}
+A reliability score can rank a low-IoU event, denoted \(Y_t=1\), without
+determining the sign of \(A_g\). In particular, a threshold policy that replaces \(a_0\) only when
+\(r(Z_t)>\tau\) has mean gain
+\begin{equation}
+\mathbb{E}[\mathbf{1}\{r(Z_t)>\tau\} A_g(Z_t)],
+\end{equation}
+which is not implied by a high AUROC for \(r\). This distinction is the central
+testable premise of our study.
+
+The same limitation appears in several common controls. Locally, if
+\(u(a;Z_t)=\mathbb{E}[\operatorname{IoU}(a,B_t^*)\mid Z_t]\) is stationary at
+\(a_0\) with negative-semidefinite Hessian \(H\), then a small correction
+\(\delta\) has \(u(a_0+\delta;Z_t)-u(a_0;Z_t)\approx
+\frac{1}{2}\delta^\top H\delta\leq0\) unless it exploits a signed residual.
+For a random-walk appearance model, an old template accumulates a stale-state
+term proportional to elapsed time, whereas a current template can be
+contaminated; a confidence alarm alone does not identify which error is smaller.
+Likewise, a motion mixture helps only when its residual is stably anti-correlated
+with the visual residual. Coordinate-wise posterior changes need not improve
+the joint four-boundary IoU. Finally, a deterministic mapping of \(Z_t\) cannot
+create new information about \(B_t^*\); this data-processing observation does
+not prove that \(a_0\) is Bayes-optimal, but motivates testing signed action
+advantage rather than confidence alone.
 
 \section{Protocol}
 \noindent\textbf{Model and invariants.} Every experiment uses the released
@@ -143,6 +180,28 @@ Logarithmic sampler & 0.830650 & -0.002730 & [-0.010716, 0.003984] & 31.32 \\
 }
 \end{table}
 
+\noindent\textbf{Risk-stratified action advantage.} We performed a read-only
+post-hoc audit of the valid CSPP selection output (not a new policy selection).
+The q85 entropy and disagreement thresholds were estimated only from the 60
+calibration sequences. The 60 held selection sequences provide 7,955
+non-initial frames after aligning the byte-identical passive baseline output,
+reliability logs, CSPP output, and public GT. High-entropy frames have mean
+CSPP-minus-baseline IoU +0.00941 (95\% sequence bootstrap
+[-0.01732, 0.04072]); high-disagreement frames have +0.00823
+([-0.01641, 0.03306]). Both intervals cross zero. Across the 4,487 frames
+whose CSPP box changed, the mean is -0.00208 ([-0.02557, 0.02048]). Thus the
+risk strata have suggestive point estimates but do not establish the signed
+action advantage required for deployment.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{../../results/17.1-risk-stratified-action-advantage/strata.png}
+\caption{Read-only CSPP-minus-baseline IoU on the held selection partition.
+Error bars are 95\% sequence-bootstrap intervals; thresholds were fixed on the
+separate calibration partition. Positive high-risk point estimates remain too
+uncertain to support a new action policy.}
+\end{figure}
+
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{../figures/got10k_bdev_memory_interventions.png}
@@ -187,10 +246,11 @@ Sparse-flow arbitration & -0.002827 & -27.9\% & screen \\
 
 \section{Discussion and Limitations}
 The shared pattern is that hard intervention can sacrifice normal appearance
-adaptation more often than it prevents memory pollution. Uncertainty, motion
-inconsistency, and disagreement are not calibrated error probabilities for a
-frozen model. Further, changing the effective template distribution may create
-an input regime unseen during training. For the closest-to-neutral logarithmic
+adaptation more often than it prevents memory pollution. In this checkpoint,
+the tested uncertainty, motion-inconsistency, and disagreement signals did not
+establish a reproducible positive action advantage for their paired controls.
+Further, changing the effective template distribution may create an input
+regime unseen during training. For the closest-to-neutral logarithmic
 sampler, sequence-level AO changes have weak Spearman associations with public
 GOT-10k labels and simple geometric summaries (absolute $\rho\leq0.102$ for
 absence, cover-label mean, cut fraction, relative motion, scale variation, and

@@ -1,8 +1,93 @@
 {
+  "schema_version": "1.0",
   "sources": [
-    {"id": "E001", "citation_key": "wang2026fartrack", "url": "https://arxiv.org/abs/2602.03214", "verified": true, "verified_on": "2026-08-19", "supports": "FARTrack architecture and reported upstream scope"},
-    {"id": "E002", "citation_key": "huang2021got10k", "url": "https://doi.org/10.1109/TPAMI.2019.2957464", "verified": true, "verified_on": "2026-08-19", "supports": "GOT-10k benchmark and one-shot protocol"},
-    {"id": "E003", "citation_key": "fan2019lasot", "url": "https://doi.org/10.1109/CVPR.2019.00552", "verified": true, "verified_on": "2026-08-19", "supports": "LaSOT benchmark characteristics"}
-  ],
-  "note": "Local draft evidence ledger. Numerical research results are bound to JSON files listed in research/EXPERIMENT_LOG.md."
+    {
+      "evidence_id": "E001",
+      "source_type": "preprint",
+      "title": "FARTrack: Fast Autoregressive Visual Tracking with High Performance",
+      "authors": ["Guijie Wang", "Tong Lin", "Yifan Bai", "Anjia Cao", "Shiyi Liang", "Wangbo Zhao", "Xing Wei"],
+      "year": 2026,
+      "identifiers": {"doi": "", "pmid": "", "pmcid": "", "isbn": "", "url": "https://arxiv.org/abs/2602.03214"},
+      "locator": "arXiv record and released checkpoint provenance",
+      "confidentiality": "public",
+      "verification": {"status": "unverified", "source_opened": true, "verified_by": "", "verified_on": ""}
+    },
+    {
+      "evidence_id": "E002",
+      "source_type": "journal_article",
+      "title": "GOT-10k: A Large High-Diversity Benchmark for Generic Object Tracking in the Wild",
+      "authors": ["Lianghua Huang", "Xin Zhao", "Kaiqi Huang"],
+      "year": 2021,
+      "identifiers": {"doi": "10.1109/TPAMI.2019.2957464", "pmid": "", "pmcid": "", "isbn": "", "url": "https://doi.org/10.1109/TPAMI.2019.2957464"},
+      "locator": "benchmark and one-shot protocol description",
+      "confidentiality": "public",
+      "verification": {"status": "unverified", "source_opened": true, "verified_by": "", "verified_on": ""}
+    },
+    {
+      "evidence_id": "E003",
+      "source_type": "conference_paper",
+      "title": "LaSOT: A High-Quality Benchmark for Large-Scale Single Object Tracking",
+      "authors": ["Heng Fan", "Liting Lin", "Fan Yang", "Peng Chu", "Ge Deng", "Sijia Yu", "Hexin Bai", "Yong Xu", "Chunyuan Liao", "Haibin Ling"],
+      "year": 2019,
+      "identifiers": {"doi": "10.1109/CVPR.2019.00552", "pmid": "", "pmcid": "", "isbn": "", "url": "https://doi.org/10.1109/CVPR.2019.00552"},
+      "locator": "benchmark description",
+      "confidentiality": "public",
+      "verification": {"status": "unverified", "source_opened": true, "verified_by": "", "verified_on": ""}
+    },
+    {
+      "evidence_id": "E004",
+      "source_type": "conference_paper",
+      "title": "Model Uncertainty Guides Visual Object Tracking",
+      "authors": ["Lijun Zhou", "Antoine Ledent", "Qintao Hu", "Ting Liu", "Jianlin Zhang", "Marius Kloft"],
+      "year": 2021,
+      "identifiers": {"doi": "10.1609/aaai.v35i4.16473", "pmid": "", "pmcid": "", "isbn": "", "url": "https://ojs.aaai.org/index.php/AAAI/article/view/16473"},
+      "locator": "uncertainty-guided tracking comparison",
+      "confidentiality": "public",
+      "verification": {"status": "unverified", "source_opened": true, "verified_by": "", "verified_on": ""}
+    },
+    {
+      "evidence_id": "E005",
+      "source_type": "conference_paper",
+      "title": "UAST: Uncertainty-Aware Siamese Tracking",
+      "authors": ["Qiang Zhang", "Zhi Zhang", "Chao Zheng", "et al."],
+      "year": 2022,
+      "identifiers": {"doi": "", "pmid": "", "pmcid": "", "isbn": "", "url": "https://proceedings.mlr.press/v162/zhang22g/zhang22g.pdf"},
+      "locator": "uncertainty-aware tracking comparison",
+      "confidentiality": "public",
+      "verification": {"status": "unverified", "source_opened": true, "verified_by": "", "verified_on": ""}
+    },
+    {
+      "evidence_id": "E006",
+      "source_type": "preprint",
+      "title": "UncTrack: Reliable Visual Object Tracking with Uncertainty-Aware Prototype Memory Network",
+      "authors": ["Siyuan Yao", "Yang Guo", "Yanyang Yan", "Wenqi Ren", "Xiaochun Cao"],
+      "year": 2025,
+      "identifiers": {"doi": "", "pmid": "", "pmcid": "", "isbn": "", "url": "https://arxiv.org/abs/2503.12888"},
+      "locator": "uncertainty-aware memory comparison",
+      "confidentiality": "public",
+      "verification": {"status": "unverified", "source_opened": true, "verified_by": "", "verified_on": ""}
+    },
+    {
+      "evidence_id": "E007",
+      "source_type": "conference_paper",
+      "title": "An Iterative Image Registration Technique with an Application to Stereo Vision",
+      "authors": ["Bruce D. Lucas", "Takeo Kanade"],
+      "year": 1981,
+      "identifiers": {"doi": "", "pmid": "", "pmcid": "", "isbn": "", "url": ""},
+      "locator": "historical optical-flow reference; a human author must supply and verify a canonical archival URL before submission",
+      "confidentiality": "public",
+      "verification": {"status": "unverified", "source_opened": false, "verified_by": "", "verified_on": ""}
+    },
+    {
+      "evidence_id": "E008",
+      "source_type": "policy",
+      "title": "ICASSP 2027 Call for Papers",
+      "authors": ["IEEE Signal Processing Society"],
+      "year": 2026,
+      "identifiers": {"doi": "", "pmid": "", "pmcid": "", "isbn": "", "url": "https://2027.ieeeicassp.org/wp-content/uploads/sites/13/2019/08/ICASSP2027-CallForPapers-July1.pdf"},
+      "locator": "page-limit and submission-date requirements accessed 2026-08-20",
+      "confidentiality": "public",
+      "verification": {"status": "unverified", "source_opened": true, "verified_by": "", "verified_on": ""}
+    }
+  ]
 }
