@@ -1,7 +1,9 @@
 task: >-
-  Training-free transactional autoregressive memory control for frozen FARTrackSparse.
-  Optimize public GOT-10k validation AO; retain full LaSOT and GOT-10k test for frozen final validation.
+  Cross-model, training-free RGB single-object tracking research on frozen
+  SiamRPN++, OSTrack, MixFormer-Online, ODTrack, and FARTrackSparse. Test
+  whether internal risk prediction transfers into positive conditional action
+  advantage under a B_dev-only calibration/selection protocol.
 coordinator:
-  max_cycles: 3
+  max_cycles: 5
   ui:
     interaction_mode: auto
