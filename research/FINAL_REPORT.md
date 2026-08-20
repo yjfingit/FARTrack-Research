@@ -158,3 +158,8 @@ retained qualitative provenance, and a formal risk-versus-action criterion.
 4. Obtain venue-appropriate human peer review. This package reports one
    checkpoint and one full public development split, so the paper must retain
    its bounded claim and limitations.
+5. Preserve future-run lifecycle metadata from the start. The current session
+   has report and metrics coverage, but some early executor prompts plus the
+   global events.jsonl and run_stats.json were not retained; strict Arbor
+   artifact validation therefore remains unavailable for those historical
+   nodes. No missing event history has been reconstructed or fabricated.
