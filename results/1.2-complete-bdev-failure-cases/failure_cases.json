@@ -1,0 +1,42 @@
+[
+  {
+    "method": "TRM-FAR",
+    "sequence": "GOT-10k_Val_000042",
+    "selection_rule": "argmin_frame(candidate_iou - baseline_iou)",
+    "frame_index_zero_based": 73,
+    "frame_file": "00000074.jpg",
+    "baseline_iou": 0.9505256648113791,
+    "candidate_iou": 0.0,
+    "delta_iou": -0.9505256648113791
+  },
+  {
+    "method": "Counterfactual",
+    "sequence": "GOT-10k_Val_000108",
+    "selection_rule": "argmin_frame(candidate_iou - baseline_iou)",
+    "frame_index_zero_based": 161,
+    "frame_file": "00000162.jpg",
+    "baseline_iou": 0.987012987012987,
+    "candidate_iou": 0.02779875463698993,
+    "delta_iou": -0.9592142323759971
+  },
+  {
+    "method": "Stable-anchor",
+    "sequence": "GOT-10k_Val_000108",
+    "selection_rule": "argmin_frame(candidate_iou - baseline_iou)",
+    "frame_index_zero_based": 161,
+    "frame_file": "00000162.jpg",
+    "baseline_iou": 0.987012987012987,
+    "candidate_iou": 0.027965666837710502,
+    "delta_iou": -0.9590473201752765
+  },
+  {
+    "method": "Logarithmic",
+    "sequence": "GOT-10k_Val_000071",
+    "selection_rule": "argmin_frame(candidate_iou - baseline_iou)",
+    "frame_index_zero_based": 49,
+    "frame_file": "00000050.jpg",
+    "baseline_iou": 0.9425725789362153,
+    "candidate_iou": 0.0,
+    "delta_iou": -0.9425725789362153
+  }
+]
